@@ -19,31 +19,43 @@ public class Directions implements IDirections  {
     }
 
     public boolean add( Set<Direct> d ) {
-		boolean wasAdded = false;
+		boolean hasAdded = false;
 		for(Direct e : d) {    //weiß ich nicht, vllt geht das, vllt auch nicht
 			if( add(e) )
-				wasAdded = true;
+				hasAdded = true;
 		}
-    	return wasAdded;
+    	return hasAdded;
     }
 
     /*
      * merges all direct from other into this one
      */
     public boolean addAll( IDirections other ) {
-		// mit other.getAllSrcs(); other.getAllDsts(); ein neues Set<Direct> erstellen und dann add Methode aufrufen?
-    	return false;
+		boolean hasAdded = false;
+
+		Set<Airport> airportsSrcsSet = other.getAllSrcs();
+		Set<Airport> airportsDstsSet = other.getAllDsts();
+
+		List<Airport> airportsSrcsList = new ArrayList<>(airportsSrcsSet);
+		List<Airport> airportsDstsList = new ArrayList<>(airportsDstsSet);
+
+		for(int i = 0; i < airportsSrcsList.size(); i++){
+			if(add(new Direct(airportsSrcsList.get(i), airportsDstsList.get(i))))
+				hasAdded = true;
+		}
+
+    	return hasAdded;
     }
     /*
      * removes direct from directions
      *    returns true if directions changes, false if not
      */
     public boolean remove( Direct d ) {
-    	return false;
+    	return airportDirectMap.values().remove(d);
     }
     
     public boolean contains( Direct d ) {
-		return false;
+		return airportDirectMap.containsValue(d);
     }
     
     /*
@@ -53,8 +65,8 @@ public class Directions implements IDirections  {
     public Set<Airport> getAllSrcs(){
 		Set<Airport> airportsSrcs = new HashSet<>();
 
-		for(Airport key : airportDirectMap.keySet())
-			airportsSrcs.add(airportDirectMap.get(key).getSrc());
+		for(Direct d : airportDirectMap.values())
+			airportsSrcs.add(d.getSrc());
 
     	return airportsSrcs;
     }
@@ -66,8 +78,8 @@ public class Directions implements IDirections  {
     public Set<Airport> getAllDsts(){
 		Set<Airport> airportsDsts = new HashSet<>();
 
-		for(Airport key : airportDirectMap.keySet())
-			airportsDsts.add(airportDirectMap.get(key).getDst());
+		for(Direct d : airportDirectMap.values())
+			airportsDsts.add(d.getDst());
 
 		return airportsDsts;
     }
