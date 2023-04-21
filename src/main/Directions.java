@@ -1,29 +1,37 @@
-import java.util.List;
-import java.util.Set;
-import java.util.Collection;
+import java.util.*;
 
 /*
  * class contains several directs (no multiple occurrences)
  */
 public class Directions implements IDirections  {
     
-    
+    private Map<Airport, Direct> airportDirectMap = new HashMap<>();
     /*
      * adds a direct to directions
      *   returns true if directions changes, false if not
      */
     public boolean add( Direct d ) {
-    	return false;
+    	if( !this.contains(d) ){
+			airportDirectMap.put(d.getSrc(), d);
+			return true;
+		}
+		return false;
     }
-    
+
     public boolean add( Set<Direct> d ) {
-    	return false;
+		boolean wasAdded = false;
+		for(Direct e : d) {    //weiß ich nicht, vllt geht das, vllt auch nicht
+			if( add(e) )
+				wasAdded = true;
+		}
+    	return wasAdded;
     }
-    
+
     /*
      * merges all direct from other into this one
      */
     public boolean addAll( IDirections other ) {
+		// mit other.getAllSrcs(); other.getAllDsts(); ein neues Set<Direct> erstellen und dann add Methode aufrufen?
     	return false;
     }
     /*
@@ -35,7 +43,7 @@ public class Directions implements IDirections  {
     }
     
     public boolean contains( Direct d ) {
-       return false;	
+		return false;
     }
     
     /*
@@ -43,7 +51,12 @@ public class Directions implements IDirections  {
      *    (empty set if there are no such)
      */
     public Set<Airport> getAllSrcs(){
-    	return null;
+		Set<Airport> airportsSrcs = new HashSet<>();
+
+		for(Airport key : airportDirectMap.keySet())
+			airportsSrcs.add(airportDirectMap.get(key).getSrc());
+
+    	return airportsSrcs;
     }
     
     /*
@@ -51,14 +64,22 @@ public class Directions implements IDirections  {
      *    (empty set if there are no such)
      */
     public Set<Airport> getAllDsts(){
-    	return null;
+		Set<Airport> airportsDsts = new HashSet<>();
+
+		for(Airport key : airportDirectMap.keySet())
+			airportsDsts.add(airportDirectMap.get(key).getDst());
+
+		return airportsDsts;
     }
     
     /*
      * returns set of all airports that are src- or dst-airports (or both)
      */
     public Set<Airport> getAllAirports(){
-    	return null;
+		Set<Airport> allAirports = new HashSet<>();
+		allAirports.addAll(getAllSrcs());
+		allAirports.addAll(getAllDsts());
+    	return allAirports;
     }
     /*
      * returns the set of dst-airport reachable direct from src
