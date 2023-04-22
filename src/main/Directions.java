@@ -65,6 +65,8 @@ public class Directions implements IDirections  {
     
     public boolean contains( Direct d ) {
 		Set<Direct> directSet = airportDirectMap.get(d.getSrc());
+		if(directSet == null)
+			return false;
 		return directSet.contains(d) ;
     }
     
@@ -158,7 +160,21 @@ public class Directions implements IDirections  {
 	 * returns a set of (2-element) sets of airports that are directly connected to each other
 	 */
 	public Set<Set<Airport>> getBidirectedAirports(){
-		return null;
+		Set<Set<Airport>> bidirectedAirports = new HashSet<>();
+
+		for(Airport airport : airportDirectMap.keySet()){
+			for(Direct direct : airportDirectMap.get(airport)){
+				if( contains(new Direct(direct.getDst(), airport))) {
+					Set<Airport> airports = new HashSet<>();
+
+					airports.add(airport);
+					airports.add(direct.getDst());
+
+					bidirectedAirports.add(airports);
+				}
+			}
+		}
+		return bidirectedAirports;
 	}
 	/*
 	 * returns a (length-) minimal round-trip from airport src to at least 
