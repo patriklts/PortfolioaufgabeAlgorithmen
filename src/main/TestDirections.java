@@ -31,6 +31,8 @@ public class TestDirections {
 		directions.add(new Direct(airport2, airport1));
 		System.out.println(d.getBidirectedAirports());
 
+		System.out.println(d.getDsts(new Airport("DME"), 1));
+
 	}
 
 }

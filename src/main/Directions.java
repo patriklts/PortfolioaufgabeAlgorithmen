@@ -116,7 +116,11 @@ public class Directions implements IDirections  {
 	public Set<Airport> getDsts( Airport src ){
 		Set<Airport> dstsAirports = new HashSet<>();
 
-		airportDirectMap.get(src).forEach(d -> dstsAirports.add(d.getDst()));
+		Set<Direct> directSet = airportDirectMap.get(src);
+		if( directSet == null)
+			return dstsAirports;
+
+		directSet.forEach(d -> dstsAirports.add(d.getDst()));
 		return dstsAirports;
 	}
 	
@@ -141,7 +145,16 @@ public class Directions implements IDirections  {
 	 *    and not reachable with fewer changes (0 = direct)
 	 */
 	public Set<Airport> getDsts( Airport src, int numChanges ){
-		return null;
+		Set<Airport> airportSet = new HashSet<>(getDsts(src));
+
+		for(int i = 0; i<numChanges; i++){
+			Set<Airport> tmpSet = new HashSet<>();
+			for(Airport airport : airportSet) {
+				tmpSet.addAll(getDsts(airport));
+			}
+			airportSet.addAll(tmpSet);
+		}
+		return airportSet;
 	}
 
 	/*
@@ -182,6 +195,8 @@ public class Directions implements IDirections  {
 	 *    (if no such exists, return null)
 	 */
 	public List<Airport> minimalRoundTrip( Airport src ){
+
+		// vllt mit getRoute(). Also check, ob von dsts getRoute auf ursprünglichen srcs möglich
 		return null;
 	}
 }
