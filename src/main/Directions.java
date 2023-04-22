@@ -5,14 +5,16 @@ import java.util.*;
  */
 public class Directions implements IDirections  {
     
-    private Map<Airport, Direct> airportDirectMap = new HashMap<>();
+    private Map<Airport, Set<Direct>> airportDirectMap = new HashMap<>();
     /*
      * adds a direct to directions
      *   returns true if directions changes, false if not
      */
     public boolean add( Direct d ) {
-    	if( !this.contains(d) ){
-			airportDirectMap.put(d.getSrc(), d);
+		airportDirectMap.computeIfAbsent(d.getSrc(), k -> new HashSet<>());
+		
+		if( !this.contains(d) ){
+			airportDirectMap.get(d.getSrc()).add(d);
 			return true;
 		}
 		return false;
@@ -20,8 +22,10 @@ public class Directions implements IDirections  {
 
     public boolean add( Set<Direct> d ) {
 		boolean hasAdded = false;
-		for(Direct e : d) {    //weiß ich nicht, vllt geht das, vllt auch nicht
-			if( add(e) )
+
+		//d.forEach(e -> add(e));
+		for(Direct direct : d) {    //weiß ich nicht, vllt geht das, vllt auch nicht
+			if( add(direct) )
 				hasAdded = true;
 		}
     	return hasAdded;
@@ -40,7 +44,7 @@ public class Directions implements IDirections  {
 		List<Airport> airportsDstsList = new ArrayList<>(airportsDstsSet);
 
 		for(int i = 0; i < airportsSrcsList.size(); i++){
-			if(add(new Direct(airportsSrcsList.get(i), airportsDstsList.get(i))))
+			if( add(new Direct(airportsSrcsList.get(i), airportsDstsList.get(i))) )
 				hasAdded = true;
 		}
 
@@ -51,11 +55,17 @@ public class Directions implements IDirections  {
      *    returns true if directions changes, false if not
      */
     public boolean remove( Direct d ) {
-    	return airportDirectMap.values().remove(d);
+		if( contains(d) ){
+			Set<Direct> directSet = airportDirectMap.get(d.getSrc());
+			directSet.remove(d);
+			return true;
+		}
+    	return false;
     }
     
     public boolean contains( Direct d ) {
-		return airportDirectMap.containsValue(d);
+		Set<Direct> directSet = airportDirectMap.get(d.getSrc());
+		return directSet.contains(d) ;
     }
     
     /*
@@ -65,8 +75,9 @@ public class Directions implements IDirections  {
     public Set<Airport> getAllSrcs(){
 		Set<Airport> airportsSrcs = new HashSet<>();
 
-		for(Direct d : airportDirectMap.values())
-			airportsSrcs.add(d.getSrc());
+		for(Set<Direct> directSet : airportDirectMap.values())
+			for(Direct direct : directSet)
+				airportsSrcs.add(direct.getSrc());
 
     	return airportsSrcs;
     }
@@ -78,8 +89,9 @@ public class Directions implements IDirections  {
     public Set<Airport> getAllDsts(){
 		Set<Airport> airportsDsts = new HashSet<>();
 
-		for(Direct d : airportDirectMap.values())
-			airportsDsts.add(d.getDst());
+		for(Set<Direct> directSet : airportDirectMap.values())
+			for(Direct direct : directSet)
+				airportsDsts.add(direct.getDst());
 
 		return airportsDsts;
     }
@@ -89,8 +101,10 @@ public class Directions implements IDirections  {
      */
     public Set<Airport> getAllAirports(){
 		Set<Airport> allAirports = new HashSet<>();
+
 		allAirports.addAll(getAllSrcs());
 		allAirports.addAll(getAllDsts());
+
     	return allAirports;
     }
     /*
@@ -98,7 +112,10 @@ public class Directions implements IDirections  {
      *    (empty set of there are no such)
      */
 	public Set<Airport> getDsts( Airport src ){
-		return null;
+		Set<Airport> dstsAirports = new HashSet<>();
+
+		airportDirectMap.get(src).forEach(d -> dstsAirports.add(d.getDst()));
+		return dstsAirports;
 	}
 	
 	/*
@@ -106,7 +123,15 @@ public class Directions implements IDirections  {
 	 *    (empty set if there are no such)
 	 */
 	public Set<Airport> getSrcs( Airport dst ){
-		return null;
+		Set<Airport> srcsAirports = new HashSet<>();
+
+		for(Set<Direct> directSet : airportDirectMap.values() ){
+			for(Direct direct : directSet)
+				if( direct.getDst() == dst )
+					srcsAirports.add(direct.getSrc());
+		}
+
+		return srcsAirports;
 	}
 	
 	/*
