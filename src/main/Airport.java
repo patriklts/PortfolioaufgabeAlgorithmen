@@ -1,7 +1,7 @@
 import java.util.Objects;
 
 public class Airport {
-	private String iata;
+	private final String iata;
 	private String city;
 	//private ...
 	public Airport( String iata ) {
@@ -11,6 +11,7 @@ public class Airport {
 		this.iata=iata; this.city=city;
 	}
 
+	@Override
 	public String toString(){
 		return this.iata;
 	}

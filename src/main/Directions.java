@@ -4,15 +4,18 @@ import java.util.*;
  * class contains several directs (no multiple occurrences)
  */
 public class Directions implements IDirections  {
-    
+
+	//HashMap für Zuordnung von Start-Airport und Set der Directions von diesem
     private Map<Airport, Set<Direct>> airportDirectMap = new HashMap<>();
     /*
      * adds a direct to directions
      *   returns true if directions changes, false if not
      */
     public boolean add( Direct d ) {
+		//Falls für Src-Airport noch kein Set hinterlegt, HashSet anlegen
 		airportDirectMap.computeIfAbsent(d.getSrc(), k -> new HashSet<>());
-		
+
+		//Nur hinzufügen, wenn noch nicht vorhanden
 		if( !this.contains(d) ){
 			airportDirectMap.get(d.getSrc()).add(d);
 			return true;
@@ -21,10 +24,11 @@ public class Directions implements IDirections  {
     }
 
     public boolean add( Set<Direct> d ) {
+		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
-		//d.forEach(e -> add(e));
-		for(Direct direct : d) {    //weiß ich nicht, vllt geht das, vllt auch nicht
+		//Set durchlaufen und für jedes Element add() aufrufen, wenn Element hinzugefügt: hasAdded -> true
+		for(Direct direct : d) {
 			if( add(direct) )
 				hasAdded = true;
 		}
@@ -122,6 +126,7 @@ public class Directions implements IDirections  {
 
 		directSet.forEach(d -> dstsAirports.add(d.getDst()));
 		return dstsAirports;
+
 	}
 	
 	/*

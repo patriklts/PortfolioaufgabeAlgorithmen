@@ -1,14 +1,15 @@
 import java.util.Objects;
 
 public class Direct {
-	private Airport src;
-	private Airport dst;
+	private final Airport src;
+	private final Airport dst;
 	
 	public Direct( Airport src, Airport dst ) {
 		this.src = src;
 		this.dst = dst;
 	}
 
+	@Override
 	public String toString(){
 		return this.src + "->" + this.dst;
 	}
