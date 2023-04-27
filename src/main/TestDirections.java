@@ -1,3 +1,4 @@
+import javax.sound.midi.Soundbank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,6 +52,7 @@ public class TestDirections {
 		//Test für getSrcs(Airport dst)
 		System.out.println(directions.getSrcs(airport3));							//Soll: [MOS, FRA]
 		System.out.println(directions.getSrcs(new Airport("NIE")));				//Soll: []
+
 		//Test für getDsts(Airport src)
 		System.out.println(d.getDsts(new Airport("ORD")));						//Soll: []
 		System.out.println(d.getDsts(new Airport("DME")));						//Soll: [CSX, FKB, ORD, ZRH]
@@ -58,24 +60,50 @@ public class TestDirections {
 		//Test für getDsts(Airport src, int numChanges)
 		System.out.println(d.getDsts(new Airport("DME"), 1));		//Soll: [CSX, FKB, ORD, ZRH, DME, TPE]
 
-		//Test für contains()
+		//Test für contains(Direct d)
 		System.out.println(directions.contains(new Direct(airport1, airport2)));	//Soll: true
-		//Test für contains()
+		//Test für contains(Direct d)
 		System.out.println(directions.contains(new Direct(airport6, airport1)));	//Soll: false
 
 		//Test für getBidirectedAirports()
 		System.out.println(directions.getBidirectedAirports());		//Soll: []
 		directions.add(new Direct(airport2, airport1));
-		System.out.println(directions.getBidirectedAirports());		//Soll: [FRA, ZRH]
+		System.out.println(directions.getBidirectedAirports());		//Soll: [[FRA, ZRH]]
 		System.out.println(d.getBidirectedAirports());				//Soll: [[CSX,DME], [ABC, XYZ]]
 
-		//addAll Test einbauen
+		//Test für addAll(IDirections other)
+		System.out.println(directions.addAll(directions));			//Soll: false
+		IDirections tmpOtherDirect = setUpSecondIDirections();
+		System.out.println(tmpOtherDirect.getAllAirports());		//Soll: [HN, BGH, MUN, KA]
+		System.out.println(tmpOtherDirect.addAll(directions));		//Soll: true
+		System.out.println(tmpOtherDirect.getAllAirports());		//Soll: [HN, BGH, MUN, KA, FRA, ZRH, CR, SHA, MOS, S]
 
-		//Test für remove()
+		//Test für remove(Direct d)
 		System.out.println(directions.remove(new Direct(airport6, airport1)));		//Soll: false
 		System.out.println(directions.remove(new Direct(airport1, airport2)));		//Soll: true
 		System.out.println(directions.getSrcs(airport2));							//Soll: []
 		System.out.println(directions.getAllDsts());								//Soll: [FRA, SHA, S, CR]
+	}
+
+	public static IDirections setUpSecondIDirections(){
+		//Setup von neuem IDirections für addAll(IDirections ohter)
+		IDirections otherDirections = new Directions();
+
+		//Erstellen von DummyAirports
+		Airport airport1 = new Airport("HN","Heilbronn");
+		Airport airport2 = new Airport("BGH", "Bad Mergentheim");
+		Airport airport3 = new Airport("MUN","Muenchen");
+		Airport airport4 = new Airport("KA", "Karlsruhe");
+
+		//Directs erstellen mit DummyAirports
+		Direct tmpDirect1 = new Direct(airport1, airport2);
+		Direct tmpDirect2 = new Direct(airport3, airport4);
+
+		//Airports zu otherDirections hinzufügen
+		otherDirections.add(tmpDirect1);
+		otherDirections.add(tmpDirect2);
+
+		return otherDirections;
 	}
 
 }

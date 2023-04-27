@@ -7,6 +7,7 @@ public class Directions implements IDirections  {
 
 	//HashMap für Zuordnung von Start-Airport und Set der Directions von diesem
     private final Map<Airport, Set<Direct>> airportDirectMap = new HashMap<>();
+
     /*
      * adds a direct to directions
      *   returns true if directions changes, false if not
@@ -39,8 +40,15 @@ public class Directions implements IDirections  {
      * merges all direct from other into this one
      */
     public boolean addAll( IDirections other ) {
+		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
+
+		//FUCK
+		//for(Direct direct : other)
+
+		//Code ist falsch, da neue Directions erfindet, möglicherweise vorher abgleich über contains
+		/*
 		Set<Airport> airportsSrcsSet = other.getAllSrcs();
 		Set<Airport> airportsDstsSet = other.getAllDsts();
 
@@ -51,7 +59,7 @@ public class Directions implements IDirections  {
 			if( add(new Direct(airportsSrcsList.get(i), airportsDstsList.get(i))) )
 				hasAdded = true;
 		}
-
+		*/
     	return hasAdded;
     }
     /*
@@ -81,8 +89,7 @@ public class Directions implements IDirections  {
     public Set<Airport> getAllSrcs(){
 		Set<Airport> airportsSrcs = new HashSet<>();
 
-		for(Set<Direct> directSet : airportDirectMap.values())
-			for(Direct direct : directSet)
+		for(Direct direct : this.getAllDirects())
 				airportsSrcs.add(direct.getSrc());
 
     	return airportsSrcs;
@@ -95,9 +102,8 @@ public class Directions implements IDirections  {
     public Set<Airport> getAllDsts(){
 		Set<Airport> airportsDsts = new HashSet<>();
 
-		for(Set<Direct> directSet : airportDirectMap.values())
-			for(Direct direct : directSet)
-				airportsDsts.add(direct.getDst());
+		for(Direct direct : this.getAllDirects())
+			airportsDsts.add(direct.getDst());
 
 		return airportsDsts;
     }
@@ -203,5 +209,14 @@ public class Directions implements IDirections  {
 
 		// vllt mit getRoute(). Also check, ob von dsts getRoute auf ursprünglichen srcs möglich
 		return null;
+	}
+
+	//eigene Methode um alle Directs in einem Set zu erhalten
+	private Set<Direct> getAllDirects(){
+		Set<Direct> directs = new HashSet<>();
+
+		for(Set<Direct> directSet : airportDirectMap.values())
+			directs.addAll(directSet);
+		return directs;
 	}
 }
