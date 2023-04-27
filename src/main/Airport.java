@@ -1,7 +1,7 @@
 import java.util.Objects;
 
 public class Airport {
-	private final String iata;
+	private String iata;
 	private String city;
 	//private ...
 	public Airport( String iata ) {

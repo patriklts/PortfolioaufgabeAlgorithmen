@@ -39,27 +39,27 @@ public class Directions implements IDirections  {
     /*
      * merges all direct from other into this one
      */
+	//Lösung ist O(n^2) → sehr teuer und schlecht.
+	//Besser wäre Lösung über getAllDirects() oder map.values(), aber wegen Interface nicht möglich
     public boolean addAll( IDirections other ) {
 		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
-
-		//FUCK
-		//for(Direct direct : other)
-
-		//Code ist falsch, da neue Directions erfindet, möglicherweise vorher abgleich über contains
-		/*
+		//Alle Srcs und Dsts Airports von other in Set abspeichern
 		Set<Airport> airportsSrcsSet = other.getAllSrcs();
 		Set<Airport> airportsDstsSet = other.getAllDsts();
 
-		List<Airport> airportsSrcsList = new ArrayList<>(airportsSrcsSet);
-		List<Airport> airportsDstsList = new ArrayList<>(airportsDstsSet);
-
-		for(int i = 0; i < airportsSrcsList.size(); i++){
-			if( add(new Direct(airportsSrcsList.get(i), airportsDstsList.get(i))) )
-				hasAdded = true;
+		for (Airport airportSrcs : airportsSrcsSet) {
+			for (Airport airportDsts : airportsDstsSet) {
+				//Jedes mögliche Direct aus Sets erstellen
+				Direct tmpDirect = new Direct(airportSrcs, airportDsts);
+				//Nur wenn Direct auch in other vorhanden add() aufrufen
+				if (other.contains(tmpDirect)) {
+					if (add(tmpDirect))
+						hasAdded = true;
+				}
+			}
 		}
-		*/
     	return hasAdded;
     }
     /*
@@ -67,6 +67,7 @@ public class Directions implements IDirections  {
      *    returns true if directions changes, false if not
      */
     public boolean remove( Direct d ) {
+		//Nur wenn Direct vorhanden aus Map entfernen
 		if( contains(d) ){
 			Set<Direct> directSet = airportDirectMap.get(d.getSrc());
 			directSet.remove(d);
@@ -77,6 +78,7 @@ public class Directions implements IDirections  {
     
     public boolean contains( Direct d ) {
 		Set<Direct> directSet = airportDirectMap.get(d.getSrc());
+		//Wenn für den SrcAirport kein Set hinterlegt → Null abfangen und return false
 		if(directSet == null)
 			return false;
 		return directSet.contains(d) ;
@@ -88,10 +90,9 @@ public class Directions implements IDirections  {
      */
     public Set<Airport> getAllSrcs(){
 		Set<Airport> airportsSrcs = new HashSet<>();
-
+		//Set aller Directs durchlaufen und von jedem Direct den SrcAirport in return Menge einfügen
 		for(Direct direct : this.getAllDirects())
 				airportsSrcs.add(direct.getSrc());
-
     	return airportsSrcs;
     }
     
@@ -101,10 +102,9 @@ public class Directions implements IDirections  {
      */
     public Set<Airport> getAllDsts(){
 		Set<Airport> airportsDsts = new HashSet<>();
-
+		//Set aller Directs durchlaufen und von jedem Direct den DstAirport in return Menge einfügen
 		for(Direct direct : this.getAllDirects())
 			airportsDsts.add(direct.getDst());
-
 		return airportsDsts;
     }
     
@@ -113,10 +113,9 @@ public class Directions implements IDirections  {
      */
     public Set<Airport> getAllAirports(){
 		Set<Airport> allAirports = new HashSet<>();
-
+		//Summe aus Mengen von allen SrcAirport und DstAirport
 		allAirports.addAll(getAllSrcs());
 		allAirports.addAll(getAllDsts());
-
     	return allAirports;
     }
     /*
@@ -127,9 +126,11 @@ public class Directions implements IDirections  {
 		Set<Airport> dstsAirports = new HashSet<>();
 
 		Set<Direct> directSet = airportDirectMap.get(src);
+		//Wenn Set null, leeres Set returnen
 		if( directSet == null)
 			return dstsAirports;
 
+		//Für jeden Direct ausgehend von SrcAirport den DstAirport ermitteln und Return-Menge hinzufügen
 		directSet.forEach(d -> dstsAirports.add(d.getDst()));
 		return dstsAirports;
 
@@ -147,7 +148,6 @@ public class Directions implements IDirections  {
 				if( direct.getDst() == dst )
 					srcsAirports.add(direct.getSrc());
 		}
-
 		return srcsAirports;
 	}
 	
@@ -207,7 +207,7 @@ public class Directions implements IDirections  {
 	 */
 	public List<Airport> minimalRoundTrip( Airport src ){
 
-		// vllt mit getRoute(). Also check, ob von dsts getRoute auf ursprünglichen srcs möglich
+		//vllt mit getRoute(). Also check, ob von dsts getRoute auf ursprünglichen srcs möglich
 		return null;
 	}
 

@@ -1,4 +1,3 @@
-import javax.sound.midi.Soundbank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -86,7 +85,7 @@ public class TestDirections {
 	}
 
 	public static IDirections setUpSecondIDirections(){
-		//Setup von neuem IDirections für addAll(IDirections ohter)
+		//Setup von neuem IDirections für addAll(IDirections other)
 		IDirections otherDirections = new Directions();
 
 		//Erstellen von DummyAirports
