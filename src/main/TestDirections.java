@@ -70,8 +70,12 @@ public class TestDirections {
 		System.out.println(d.getBidirectedAirports());				//Soll: [[CSX,DME], [ABC, XYZ]]
 
 		//addAll Test einbauen
-		//remove Test einbauen
 
+		//Test für remove()
+		System.out.println(directions.remove(new Direct(airport6, airport1)));		//Soll: false
+		System.out.println(directions.remove(new Direct(airport1, airport2)));		//Soll: true
+		System.out.println(directions.getSrcs(airport2));							//Soll: []
+		System.out.println(directions.getAllDsts());								//Soll: [FRA, SHA, S, CR]
 	}
 
 }

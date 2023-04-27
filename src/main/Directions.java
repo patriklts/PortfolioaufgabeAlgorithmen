@@ -6,7 +6,7 @@ import java.util.*;
 public class Directions implements IDirections  {
 
 	//HashMap für Zuordnung von Start-Airport und Set der Directions von diesem
-    private Map<Airport, Set<Direct>> airportDirectMap = new HashMap<>();
+    private final Map<Airport, Set<Direct>> airportDirectMap = new HashMap<>();
     /*
      * adds a direct to directions
      *   returns true if directions changes, false if not
