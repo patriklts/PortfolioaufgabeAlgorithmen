@@ -81,7 +81,7 @@ public class Directions implements IDirections  {
 		//Wenn für den SrcAirport kein Set hinterlegt → Null abfangen und return false
 		if(directSet == null)
 			return false;
-		return directSet.contains(d) ;
+		return directSet.contains(d);
     }
     
     /*
@@ -143,10 +143,9 @@ public class Directions implements IDirections  {
 	public Set<Airport> getSrcs( Airport dst ){
 		Set<Airport> srcsAirports = new HashSet<>();
 
-		for(Set<Direct> directSet : airportDirectMap.values() ){
-			for(Direct direct : directSet)
-				if( direct.getDst() == dst )
-					srcsAirports.add(direct.getSrc());
+		for(Direct direct : this.getAllDirects()){
+			if( direct.getDst().equals(dst) )
+				srcsAirports.add(direct.getSrc());
 		}
 		return srcsAirports;
 	}
@@ -178,24 +177,24 @@ public class Directions implements IDirections  {
 	 *    (if no route exists, return null; of more than one (minimal) exist, return any of those
 	 */
 	public List<Direct> getRoute( Airport src, Airport dst) {
-		List<Direct> routeList = new ArrayList<>();
-		int numChanges = 0;
-		Airport commonAirport = null;
 
-		//Falls Direktverbindung vorhanden
-		if( airportDirectMap.get(src).contains(new Direct(src, dst)) ){
-			routeList.add(new Direct(src, dst));
-			return  routeList;
-		}
+		List<Direct> routeList = new ArrayList<>();
+		Airport commonAirport = null;
 
 		//Wenn dst nie erreichbar, return null
 		if( getSrcs(dst).isEmpty() ){
 			return null;
 		}
 
+		//Falls Direktverbindung vorhanden
+		if( airportDirectMap.get(src).contains(new Direct(src, dst)) ){
+			routeList.add(new Direct(src, dst));
+			return routeList;
+		}
+
 		//Wenn in Menge der DstAirports von src dst nicht dabei, numChanges erhöhen
 		//Worst Case: Airports sind alle verkettet und src erstes und dst letztes Element → numChanges muss size - 1 groß werden
-		while( numChanges <= airportDirectMap.keySet().size() - 1 ){
+		for(int numChanges = 0; numChanges <= airportDirectMap.keySet().size() - 1; numChanges++){
 
 			Set<Airport> airportsFromSrc = getDsts(src, numChanges);
 			Set<Airport> airportsToDst = getSrcs(dst);
@@ -204,23 +203,15 @@ public class Directions implements IDirections  {
 			for(Airport airport : airportsFromSrc) {
 				if( airportsToDst.contains(airport) ){
 					commonAirport = airport;
-					routeList.add(new Direct(src, commonAirport));
+					routeList.add(new Direct(commonAirport, dst));
+					routeList.addAll(0, getRoute(src, commonAirport));
+
 					return routeList;
 				}
 			}
-			//Wenn kein gemeinsamer Airport gefunden, numChanges erhöhen
-			numChanges++;
 		}
-
-		//Wenn alle Fälle durchlaufen und kein commonAirport, return leere Liste
-		if( numChanges == airportDirectMap.keySet().size() - 1){
-			return routeList;
-		}
-
-		List<Direct> tmpDirectList = getRoute(commonAirport, dst);
-		routeList.addAll(tmpDirectList);
-
-		return routeList;
+		//Wenn alle Fälle durchlaufen und kein commonAirport, return null
+		return null;
 	}
 	/*
 	 * returns a set of (2-element) sets of airports that are directly connected to each other
@@ -228,18 +219,18 @@ public class Directions implements IDirections  {
 	public Set<Set<Airport>> getBidirectedAirports(){
 		Set<Set<Airport>> bidirectedAirports = new HashSet<>();
 
-		for(Airport airport : airportDirectMap.keySet()){
-			for(Direct direct : airportDirectMap.get(airport)){
-				if( contains(new Direct(direct.getDst(), airport))) {
-					Set<Airport> airports = new HashSet<>();
 
-					airports.add(airport);
-					airports.add(direct.getDst());
+		for(Direct direct : this.getAllDirects()){
+			if( contains(new Direct(direct.getDst(), direct.getSrc()))) {
+				Set<Airport> airports = new HashSet<>();
 
-					bidirectedAirports.add(airports);
-				}
+				airports.add(direct.getSrc());
+				airports.add(direct.getDst());
+
+				bidirectedAirports.add(airports);
 			}
 		}
+
 		return bidirectedAirports;
 	}
 	/*
@@ -249,18 +240,20 @@ public class Directions implements IDirections  {
 	 */
 	public List<Airport> minimalRoundTrip( Airport src ){
 
-		// vllt mit getRoute(). Also check, ob von dsts getRoute auf ursprünglichen srcs möglich
-		/*
 		List<Airport> airportList = new ArrayList<>();
 
 		List<Direct> directList = getRoute(src, src);
+		if(directList == null)
+			return null;
+
 		for(Direct direct : directList){
 			airportList.add(direct.getSrc());
 		}
 
-		if(airportList.size() != 0)
+		if(airportList.size() != 0) {
+			airportList.add(src);
 			return airportList;
-		 */
+		}
 		return null;
 	}
 
@@ -268,8 +261,9 @@ public class Directions implements IDirections  {
 	private Set<Direct> getAllDirects(){
 		Set<Direct> directs = new HashSet<>();
 
-		for(Set<Direct> directSet : airportDirectMap.values())
-			directs.addAll(directSet);
+		for(Airport keyAirport : airportDirectMap.keySet()) {
+				directs.addAll(airportDirectMap.get(keyAirport));
+		}
 		return directs;
 	}
 }

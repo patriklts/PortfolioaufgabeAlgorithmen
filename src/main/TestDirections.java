@@ -57,6 +57,8 @@ public class TestDirections {
 		System.out.println("Test für getSrcs(Airport dst):");
 		System.out.println(directions.getSrcs(airport3));							//Soll: [MOS, FRA]
 		System.out.println(directions.getSrcs(new Airport("NIE")));				//Soll: []
+		System.out.println(d.getSrcs(new Airport("TPE")));						//Soll: [ZRH]
+		System.out.println(d.getSrcs(new Airport("NIE")));						//Soll: []
 		System.out.println();
 
 		//Test für getDsts(Airport src)
@@ -73,7 +75,6 @@ public class TestDirections {
 		//Test für contains(Direct d)
 		System.out.println("Test für contains(Direct d):");
 		System.out.println(directions.contains(new Direct(airport1, airport2)));	//Soll: true
-		//Test für contains(Direct d)
 		System.out.println(directions.contains(new Direct(airport6, airport1)));	//Soll: false
 		System.out.println();
 
@@ -94,13 +95,33 @@ public class TestDirections {
 		System.out.println(tmpOtherDirect.getAllAirports());		//Soll: [HN, BGH, MUN, KA, FRA, ZRH, CR, SHA, MOS, S]
 		System.out.println();
 
+
 		//Test für remove(Direct d)
 		System.out.println("Test für remove(Direct d):");
 		System.out.println(directions.remove(new Direct(airport6, airport1)));		//Soll: false
+		System.out.println(directions.getSrcs(airport2));							//Soll: [FRA]
+		System.out.println(directions.getAllDsts());								//Soll: [FRA, SHA, S, CR, ZRH]
 		System.out.println(directions.remove(new Direct(airport1, airport2)));		//Soll: true
 		System.out.println(directions.getSrcs(airport2));							//Soll: []
 		System.out.println(directions.getAllDsts());								//Soll: [FRA, SHA, S, CR]
 		System.out.println();
+
+
+		//Test für getRoute(Airport src, Airport dst)
+		System.out.println("Test für getRoute(Airport src, Airport dst):");
+		System.out.println(directions.getRoute(airport1, airport6));						//Soll: null
+		directions.add(new Direct(airport4, airport6));
+		System.out.println(directions.getRoute(airport1, airport6));						//Soll: [FRA->CR, CR->SHA, SHA->S]
+		System.out.println(d.getRoute(new Airport("DME"), new Airport("TPE")));		//Soll: [DME-ZRH, ZRH->TPE]
+		System.out.println();
+
+		//Test für minimalRoundtrip(Airport src)
+		System.out.println("Test für minimalRoundtrip(Airport src)");
+		System.out.println(directions.minimalRoundTrip(airport1));					//Soll: null
+		directions.add(new Direct(airport4, airport1));
+		System.out.println(directions.minimalRoundTrip(airport1));					//Soll: FRA, CR, SHA, FRA
+		System.out.println();
+
 	}
 
 	public static IDirections setUpAnotherIDirections(){
