@@ -259,16 +259,19 @@ public class Directions implements IDirections  {
 
 	public Map<Integer, Set<Airport>> getAllDstsInfo(Airport src){
 		Map<Integer, Set<Airport>> myMap = new HashMap<>();
-		Set<Airport> airportsAlreadyInMap = new HashSet<>();
-		int numChangesKey = 1;
+		Set<Airport> airportsAlreadyInMap = new HashSet<>(getDsts(src));
+		int numChangesKey = 0;
 		boolean hasNextAirport = true;
 
-		myMap.put(0, getDsts(src));
+		myMap.put(numChangesKey, getDsts(src));
 
 		while(hasNextAirport){
+			numChangesKey++;
 			Set<Airport> tmpSet = getDsts(src, numChangesKey);
+
 			if(tmpSet.isEmpty())
 				hasNextAirport = false;
+
 			for(Airport airport : tmpSet){
 				if(!airportsAlreadyInMap.contains(airport)) {
 					myMap.computeIfAbsent(numChangesKey, k -> new HashSet<>());
@@ -276,9 +279,7 @@ public class Directions implements IDirections  {
 				}
 			}
 			airportsAlreadyInMap.addAll(tmpSet);
-			numChangesKey++;
 		}
-
 		return myMap;
 	}
 
