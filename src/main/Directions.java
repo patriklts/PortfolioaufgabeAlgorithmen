@@ -257,6 +257,32 @@ public class Directions implements IDirections  {
 		return null;
 	}
 
+	public Map<Integer, Set<Airport>> getAllDstsInfo(Airport src){
+		Map<Integer, Set<Airport>> myMap = new HashMap<>();
+		Set<Airport> airportsAlreadyInMap = new HashSet<>();
+		int numChangesKey = 1;
+		boolean hasNextAirport = true;
+
+		myMap.put(0, getDsts(src));
+
+		while(hasNextAirport){
+			Set<Airport> tmpSet = getDsts(src, numChangesKey);
+			if(tmpSet.isEmpty())
+				hasNextAirport = false;
+			for(Airport airport : tmpSet){
+				if(!airportsAlreadyInMap.contains(airport)) {
+					myMap.computeIfAbsent(numChangesKey, k -> new HashSet<>());
+					myMap.get(numChangesKey).add(airport);
+				}
+			}
+			airportsAlreadyInMap.addAll(tmpSet);
+			numChangesKey++;
+		}
+
+		return myMap;
+	}
+
+
 	//eigene Methode um alle Directs in einem Set zu erhalten
 	private Set<Direct> getAllDirects(){
 		Set<Direct> directs = new HashSet<>();
