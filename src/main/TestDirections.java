@@ -124,13 +124,12 @@ public class TestDirections {
 		System.out.println();
 
 		//Minitest von getAllDstsInfo
+		System.out.println("Test für getAllDstsInfo(Airport src)");
 		Map<Integer, Set<Airport>> dummyMap = d.getAllDstsInfo(new Airport("DME"));
-		System.out.println(dummyMap.get(0));		//Gibt das Set der Airports, die mit 0 Umstiegen erreichbar sind aus
-		System.out.println(dummyMap.get(1));		//Gibt das Set der Airports, die mit 1 Umstiegen erreichbar sind aus
-		System.out.println(dummyMap.get(2));		//Gibt das Set der Airports, die mit 2 Umstiegen erreichbar sind aus
-		System.out.println(dummyMap.get(3));		//Gibt das Set der Airports, die mit 3 Umstiegen erreichbar sind aus
-		System.out.println(dummyMap.get(5));		//etc.
-		System.out.println(dummyMap.get(6));
+		for(int i : dummyMap.keySet())
+			//Gibt das Set der Airports, die mit i Umstiegen erreichbar sind aus
+			System.out.println("Anzahl der Umstiege: " + i + "Neue erreichbare Airports: " + dummyMap.get(i));
+		System.out.println();
 	}
 
 	public static IDirections setUpAnotherIDirections(){
