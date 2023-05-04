@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class TestDirections {
@@ -122,6 +123,14 @@ public class TestDirections {
 		System.out.println(directions.minimalRoundTrip(airport1));					//Soll: FRA, CR, SHA, FRA
 		System.out.println();
 
+		//Minitest von getAllDstsInfo
+		Map<Integer, Set<Airport>> dummyMap = d.getAllDstsInfo(new Airport("DME"));
+		System.out.println(dummyMap.get(0));		//Gibt das Set der Airports, die mit 0 Umstiegen erreichbar sind aus
+		System.out.println(dummyMap.get(1));		//Gibt das Set der Airports, die mit 1 Umstiegen erreichbar sind aus
+		System.out.println(dummyMap.get(2));		//Gibt das Set der Airports, die mit 2 Umstiegen erreichbar sind aus
+		System.out.println(dummyMap.get(3));		//Gibt das Set der Airports, die mit 3 Umstiegen erreichbar sind aus
+		System.out.println(dummyMap.get(5));		//etc.
+		System.out.println(dummyMap.get(6));
 	}
 
 	public static IDirections setUpAnotherIDirections(){

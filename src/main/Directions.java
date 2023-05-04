@@ -258,26 +258,32 @@ public class Directions implements IDirections  {
 	}
 
 	public Map<Integer, Set<Airport>> getAllDstsInfo(Airport src){
+		//Map für Rückgabe und Set in dem alle bereits in Map enthaltenen Airports gespeichert werden
 		Map<Integer, Set<Airport>> myMap = new HashMap<>();
 		Set<Airport> airportsAlreadyInMap = new HashSet<>(getDsts(src));
 		int numChangesKey = 0;
 		boolean hasNextAirport = true;
-
+		//Map mit Anzahl der Umstiege befüllen
 		myMap.put(numChangesKey, getDsts(src));
 
+		//Solange weitere neue Airports mit Umstiegen erreichbar sind
 		while(hasNextAirport){
 			numChangesKey++;
+			//Menge der erreichbaren Airports innerhalb der Anzahl der Umstiege holen
 			Set<Airport> tmpSet = getDsts(src, numChangesKey);
 
+			//Alle Airports entfernen, die bereits in der Map enthalten sind
+			tmpSet.removeIf(airportsAlreadyInMap::contains);
+			//Wenn tmpSet danach leer ist, dann gibt es keinen neuen Airports mehr
 			if(tmpSet.isEmpty())
 				hasNextAirport = false;
 
 			for(Airport airport : tmpSet){
-				if(!airportsAlreadyInMap.contains(airport)) {
-					myMap.computeIfAbsent(numChangesKey, k -> new HashSet<>());
-					myMap.get(numChangesKey).add(airport);
-				}
+				//Wenn für den Key noch kein Set hinterlegt ist, neue Set anlegen
+				myMap.computeIfAbsent(numChangesKey, k -> new HashSet<>());
+				myMap.get(numChangesKey).add(airport);
 			}
+			//Set der Airports die in Map sind durch die aktuelle tmpSet erweitern
 			airportsAlreadyInMap.addAll(tmpSet);
 		}
 		return myMap;

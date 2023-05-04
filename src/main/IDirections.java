@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface IDirections {
@@ -82,4 +83,6 @@ public interface IDirections {
 	 */
 	List<Airport> minimalRoundTrip(Airport src);
 
+
+	Map<Integer, Set<Airport>> getAllDstsInfo(Airport src);
 }
