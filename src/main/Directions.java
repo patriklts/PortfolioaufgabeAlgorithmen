@@ -143,6 +143,7 @@ public class Directions implements IDirections  {
 	public Set<Airport> getSrcs( Airport dst ){
 		Set<Airport> srcsAirports = new HashSet<>();
 
+		//Jedes Direct durchlaufen und wenn DstAirport übereinstimmt → SrcAirport dem RückgabeSet hinzufügen
 		for(Direct direct : this.getAllDirects()){
 			if( direct.getDst().equals(dst) )
 				srcsAirports.add(direct.getSrc());
@@ -155,8 +156,10 @@ public class Directions implements IDirections  {
 	 *    and not reachable with fewer changes (0 = direct)
 	 */
 	public Set<Airport> getDsts( Airport src, int numChanges ){
+		//Set sofort mit den direkt erreichbaren Airports initialisieren
 		Set<Airport> airportSet = new HashSet<>(getDsts(src));
 
+		//Für alle von den bereits erreichbaren Airports die direkt erreichbaren Airports bestimmen und hinzufügen
 		for(int i = 0; i<numChanges; i++){
 			Set<Airport> tmpSet = new HashSet<>();
 			for(Airport airport : airportSet) {
@@ -176,8 +179,13 @@ public class Directions implements IDirections  {
 	 *    remark: there might no such route, exactly one such route or more such routes
 	 *    (if no route exists, return null; of more than one (minimal) exist, return any of those
 	 */
+	/* Rekursive Lösung der Routenberechnung
+	 * Idee ist die Mengen der Airports zu vergleichen und wenn keine Überschneidung vorhanden numChanges erhöhen
+	 * Wenn gemeinsamer Airport gefunden wurde -> letzte Direct ist von gemeinsamer Airport zum DstAirport
+	 * Danach Methode mit gleichen SrcAirport und gemeinsamen Airport als DstAirport aufrufen, um so Liste vom Ende zum Anfang aufzubauen
+	 * Basisfall ist direkte Verbindung von SrcAirport zu DstAirport
+	 */
 	public List<Direct> getRoute( Airport src, Airport dst) {
-
 		List<Direct> routeList = new ArrayList<>();
 		Airport commonAirport = null;
 
@@ -186,20 +194,19 @@ public class Directions implements IDirections  {
 			return null;
 		}
 
-		//Falls Direktverbindung vorhanden
+		//Falls Direktverbindung vorhanden, Basisfall für Rekursion
 		if( airportDirectMap.get(src).contains(new Direct(src, dst)) ){
 			routeList.add(new Direct(src, dst));
 			return routeList;
 		}
 
-		//Wenn in Menge der DstAirports von src dst nicht dabei, numChanges erhöhen
+		//Wenn in Set der DstAirports von src dst nicht dabei, numChanges erhöhen
 		//Worst Case: Airports sind alle verkettet und src erstes und dst letztes Element → numChanges muss size - 1 groß werden
 		for(int numChanges = 0; numChanges <= airportDirectMap.keySet().size() - 1; numChanges++){
-
 			Set<Airport> airportsFromSrc = getDsts(src, numChanges);
 			Set<Airport> airportsToDst = getSrcs(dst);
 
-			//Abgleich ob in beiden Mengen gleicher Airport
+			//Abgleich ob in beiden Set gleicher Airport
 			for(Airport airport : airportsFromSrc) {
 				if( airportsToDst.contains(airport) ){
 					commonAirport = airport;
@@ -219,7 +226,7 @@ public class Directions implements IDirections  {
 	public Set<Set<Airport>> getBidirectedAirports(){
 		Set<Set<Airport>> bidirectedAirports = new HashSet<>();
 
-
+		//Alle Directs durchlaufen und dann prüfen, ob umgedrehte Verbindung vorhanden ist
 		for(Direct direct : this.getAllDirects()){
 			if( contains(new Direct(direct.getDst(), direct.getSrc()))) {
 				Set<Airport> airports = new HashSet<>();
@@ -239,17 +246,18 @@ public class Directions implements IDirections  {
 	 *    (if no such exists, return null)
 	 */
 	public List<Airport> minimalRoundTrip( Airport src ){
-
+		//Idee: Roundtrip ist identisch wie Berechnung von optimaler Route von src nach src
 		List<Airport> airportList = new ArrayList<>();
 
 		List<Direct> directList = getRoute(src, src);
+		//Wenn keine Route gefunden wurde, gibt es kein möglichen Roundtrip
 		if(directList == null)
 			return null;
 
 		for(Direct direct : directList){
 			airportList.add(direct.getSrc());
 		}
-
+		//Nur, wenn Elemente der Liste hinzugefügt wurden
 		if(airportList.size() != 0) {
 			airportList.add(src);
 			return airportList;
@@ -290,10 +298,10 @@ public class Directions implements IDirections  {
 	}
 
 
-	//eigene Methode um alle Directs in einem Set zu erhalten
+	//eigene kleine Methode um alle Directs in einem Set zu erhalten, spart Code in mehreren Methoden und erhöht Leserlichkeit
 	private Set<Direct> getAllDirects(){
 		Set<Direct> directs = new HashSet<>();
-
+		//Jeden Schlüssel durchlaufen und die entsprechend hinterlegte Set<Direct> hinzufügen
 		for(Airport keyAirport : airportDirectMap.keySet()) {
 				directs.addAll(airportDirectMap.get(keyAirport));
 		}
