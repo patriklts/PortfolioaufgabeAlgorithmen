@@ -1,5 +1,6 @@
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class TestDirections {
@@ -8,32 +9,53 @@ public class TestDirections {
 	public static void main(String[] args){
 		IDirections d = Data.data();         //Daten aus Data
 		IDirections directions = new Directions();
-		TestDirections test = new TestDirections();
 
-		Set<Airport> airportSet = test.createTestAirport();
-		Set<Direct> directSet =  test.createTestDirect();
+
+		Set<Airport> airportSet = createTestAirport();
+		Set<Direct> directSet =  createTestDirect();
 
 		// Initialisierung des Iterators um diesen wieder zurücksetzen zu können
 		Iterator<Airport> iteratorAirport = airportSet.iterator();
-		Iterator<Direct> iteratorDirect = directSet.iterator();
 
 		// ==================================================================================
 		// Test call
 
 		// Testaufruf um die toString Methoden zu testen
-		test.testToString( iteratorAirport.next(), iteratorAirport.next() );
+		System.out.println("---------------------------");
+		System.out.println("Test von toString-Methoden:");
+		System.out.println("---------------------------");
+
+		System.out.println("Ausgabe Airports: ");
+		airportSet.forEach(TestDirections::testToString);
+		System.out.println("Ausgabe Directs: ");
+		for(Airport airport : airportSet)
+			if(iteratorAirport.hasNext())
+				testToString( iteratorAirport.next(), iteratorAirport.next() );
 		iteratorAirport = airportSet.iterator();
 
+
+
 		// Testaufruf um die add Methode zu testen
-		test.testAddDirectSingle( directions, iteratorDirect.next() );
-		iteratorDirect = directSet.iterator();
+		System.out.println("\n---------------------------");
+		System.out.println("Test von addDirect:");
+		System.out.println("---------------------------");
+		directSet.forEach(direct -> testAddDirectSingle(directions, direct));
+
 
 
 		// Testaufruf um die Add(Set) Methode zu testen
-		test.testAddDirectSet(directions, directSet);
+		System.out.println("\n---------------------------");
+		System.out.println("Test von addDirect(Set):");
+		System.out.println("---------------------------");
+
+		testAddDirect(directions, directSet);
+
 
 		// Testaufruf der getAll-Methoden mit den Data-Daten
-		test.testGetAll(d);
+		System.out.println("\n---------------------------");
+		System.out.println("Test von allen getAll* Methoden mit gegebenen Datensätzen:");
+		System.out.println("---------------------------");
+		testGetAll(d);
 
 		//getAllSrcs Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, FKB]
 		//getAllDsts Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, ORD, FKB]
@@ -41,158 +63,144 @@ public class TestDirections {
 
 
 		// Testaufruf der getAll-Methoden mit den eigenen Datensätzen
-		test.testGetAll(directions);
+		System.out.println("\n---------------------------");
+		System.out.println("Test von allen getAll* Methoden mit eigenen Datensätzen:");
+		System.out.println("---------------------------");
+		testGetAll(directions);
 
 		// Testaufruf der getSrcs Methode
+//		test.testGetSrcs( directions, iteratorAirport.next() );  //Soll: []
+//		test.testGetSrcs( directions, iteratorAirport.next() ); //Soll: [MOS, FRA]
+		System.out.println("\n---------------------------");
+		System.out.println("Test von getSrcs Methode:");
+		System.out.println("---------------------------");
+		System.out.println("Ausgabe:");
+		airportSet.forEach(airport -> testGetSrcs(directions, airport));
 
 
-		test.testGetSrcs( directions, iteratorAirport.next() );  //Soll: []
-		iteratorAirport.next();
-		test.testGetSrcs( directions, iteratorAirport.next() ); //Soll: [MOS, FRA]
-
-		test.testGetSrcs( directions,  new Airport("NIE" ) ); //Soll: []
-
-		test.testGetSrcs( d, new Airport("TPE") ); // Soll: [ZRH]
-
+		// Testaufruf der GetDst Methode
+		System.out.println("\n---------------------------");
+		System.out.println("Test von getDst Methode:");
+		System.out.println("---------------------------");
+		System.out.println("Ausgabe:");
+		airportSet.forEach(airport -> testGetDst(directions, airport));
 
 
-
-
-
-
-
-
-//
-//		//Test für getDsts(Airport src)
-//		System.out.println("Test für getDsts(Airport src):");
-//		System.out.println(d.getDsts(new Airport("ORD")));						//Soll: []
-//		System.out.println(d.getDsts(new Airport("DME")));						//Soll: [CSX, FKB, ORD, ZRH]
-//		System.out.println();
-//
 //		//Test für getDsts(Airport src, int numChanges)
-//		System.out.println("Test für getDsts(Airport src, int numChanges):");
-//		System.out.println(d.getDsts(new Airport("DME"), 1));		//Soll: [CSX, FKB, ORD, ZRH, DME, TPE]
-//		System.out.println();
+
+		System.out.println("\n---------------------------");
+		System.out.println("Test von getDst-Methode mit angabe Changes:");
+		System.out.println("---------------------------");
+		System.out.println("Ausgabe:");
+		int changes = (int) (Math.random() *10) -1 ;
+		System.out.println("Anzahl Changes: " + changes);
+		airportSet.forEach(airport -> testGetDst( directions, airport, changes ) );
+
+
+
 //
 //		//Test für contains(Direct d)
-//		System.out.println("Test für contains(Direct d):");
-//		System.out.println(directions.contains(new Direct(airport1, airport2)));	//Soll: true
-//		System.out.println(directions.contains(new Direct(airport6, airport1)));	//Soll: false
-//		System.out.println();
-//
+		System.out.println("\n---------------------------");
+		System.out.println("Test von contains Methode:");
+		System.out.println("---------------------------");
+		directSet.forEach(direct -> testContains(directions, direct ));
+
+
 //		//Test für getBidirectedAirports()
-//		System.out.println("Test für getBidirectedAirports():");
-//		System.out.println(directions.getBidirectedAirports());		//Soll: []
-//		directions.add(new Direct(airport2, airport1));
-//		System.out.println(directions.getBidirectedAirports());		//Soll: [[FRA, ZRH]]
-//		System.out.println(d.getBidirectedAirports());				//Soll: [[CSX,DME], [ABC, XYZ]]
-//		System.out.println();
-//
+		System.out.println("\n---------------------------");
+		System.out.println("Test von BiDirectedAirports Methode:");
+		System.out.println("---------------------------");
+		testGetBidirectedAirports(d);
+
+
 //		//Test für addAll(IDirections other)
-//		System.out.println("Test für addAll(IDirections other):");
-//		System.out.println(directions.addAll(directions));			//Soll: false
-//		IDirections tmpOtherDirect = setUpAnotherIDirections();
-//		System.out.println(tmpOtherDirect.getAllAirports());		//Soll: [HN, BGH, MUN, KA]
-//		System.out.println(tmpOtherDirect.addAll(directions));		//Soll: true
-//		System.out.println(tmpOtherDirect.getAllAirports());		//Soll: [HN, BGH, MUN, KA, FRA, ZRH, CR, SHA, MOS, S]
-//		System.out.println();
-//
-//
-//		//Test für remove(Direct d)
-//		System.out.println("Test für remove(Direct d):");
-//		System.out.println(directions.remove(new Direct(airport6, airport1)));		//Soll: false
-//		System.out.println(directions.getSrcs(airport2));							//Soll: [FRA]
-//		System.out.println(directions.getAllDsts());								//Soll: [FRA, SHA, S, CR, ZRH]
-//		System.out.println(directions.remove(new Direct(airport1, airport2)));		//Soll: true
-//		System.out.println(directions.getSrcs(airport2));							//Soll: []
-//		System.out.println(directions.getAllDsts());								//Soll: [FRA, SHA, S, CR]
-//		System.out.println();
-//
-//
+		System.out.println("\n---------------------------");
+		System.out.println("Test von addAll (Interface IDirections DatenTyp) Methode:");
+		System.out.println("---------------------------");
+		IDirections other = setUpAnotherIDirections();
+		testAddAll(directions, other);
+
+
 //		//Test für getRoute(Airport src, Airport dst)
-//		System.out.println("Test für getRoute(Airport src, Airport dst):");
-//		System.out.println(directions.getRoute(airport1, airport6));						//Soll: null
-//		directions.add(new Direct(airport4, airport6));
-//		System.out.println(directions.getRoute(airport1, airport6));						//Soll: [FRA->CR, CR->SHA, SHA->S]
-//		System.out.println(d.getRoute(new Airport("DME"), new Airport("TPE")));		//Soll: [DME-ZRH, ZRH->TPE]
-//		System.out.println();
+		System.out.println("\n---------------------------");
+		System.out.println("Test von der getRoute Methode:");
+		System.out.println("---------------------------");
+		for(Airport airport : airportSet)
+			if(iteratorAirport.hasNext())
+				testGetRoute( directions, airportSet.iterator().next() , airportSet.iterator().next() );
+//				testGetRoute(d, new Airport("DME"), new Airport("TPE") );
+
+
+//		Test für minimalRoundtrip(Airport src)
+		System.out.println("\n---------------------------");
+		System.out.println("Test von der minimalRoundTrip Methode:");
+		System.out.println("---------------------------");
+		airportSet.forEach( airport -> testMinimalRoundTrip(d, airport) );
+
 //
-//		//Test für minimalRoundtrip(Airport src)
-//		System.out.println("Test für minimalRoundtrip(Airport src)");
-//		System.out.println(directions.minimalRoundTrip(airport1));					//Soll: null
-//		directions.add(new Direct(airport4, airport1));
-//		System.out.println(directions.minimalRoundTrip(airport1));					//Soll: FRA, CR, SHA, FRA
-//		System.out.println();
-//
-//		//Minitest von getAllDstsInfo
-//		System.out.println("Test für getAllDstsInfo(Airport src)");
-//		Map<Integer, Set<Airport>> dummyMap = d.getAllDstsInfo(new Airport("DME"));
-//		for(int i : dummyMap.keySet())
-//			//Gibt das Set der Airports, die mit i Umstiegen erreichbar sind aus
-//			System.out.println("Anzahl der Umstiege: " + i + "Neue erreichbare Airports: " + dummyMap.get(i));
-//		System.out.println();
+//		Minitest von getAllDstsInfo
+		System.out.println("\n---------------------------");
+		System.out.println("Test von der getAllDstsInfo Methode:");
+		System.out.println("---------------------------");
+		airportSet.forEach(airport -> testGetAllDstsInfo(d, airport));
+
+		//Test für remove(Direct d)
+		System.out.println("\n---------------------------");
+		System.out.println("Test von der remove Methode:");
+		System.out.println("---------------------------");
+		directSet.forEach(direct -> testRemove(directions, direct));
+
 	}
 
 
-	// Test Method Section
-	// =====================================
+	/*
+	 * =========================
+	 *  Test Method Section
+	 * =========================
+	 */
 
+	public static void testToString(Airport a1){
 
-	public void testToString(Airport a1, Airport a2){
-
-		System.out.println("\n");
-		System.out.println("Test von toString-Methoden:");
-		System.out.println("---------------------------\n");
-
-		System.out.println("Ausgabe: ");
 		System.out.println( a1 );
-		System.out.println( a2) ;
-		System.out.println( new Direct(a1, a2) );
+		//System.out.println( new Direct(a1, a2 ) );
 
 	}
+	public static void testToString(Airport a1, Airport a2){
 
-	public void testAddDirectSingle(IDirections directions, Direct d1){
-		System.out.println("\n");
-		System.out.println("Test von addDirect:");
-		System.out.println("---------------------------\n");
+		System.out.println( new Direct(a1, a2 ) );
+	}
 
+	public static void testAddDirectSingle(IDirections directions, Direct d){
 
-		boolean isSuccessful = directions.add(d1);
+		boolean isSuccessful = directions.add(d);
 		if( isSuccessful ) {
-			System.out.println("Success!\n");
+			System.out.println("Success!");
 			System.out.println("Ausgabe:");
+			System.out.println("Hinzugefügtes Element: " + d);
 			System.out.println(directions.getAllAirports());
 		}
 		if( !isSuccessful )
-			System.out.println("Bitte Prüfen, der Direct wurde nicht hinzugefügt");
+			System.out.println("Bitte Prüfen, der Direct " + d + " wurde nicht hinzugefügt");
 
 		System.out.println("\n");
 	}
 
-	public void testAddDirectSet(IDirections directions, Set<Direct> directSet){
-
-		System.out.println("\nTest von addDirect(Set):");
-		System.out.println("---------------------------\n");
-
-
+	public static void testAddDirect(IDirections directions, Set<Direct> directSet){
+		System.out.println();
 		boolean isSuccessful = directions.add( directSet );
 
 		if( isSuccessful) {
-			System.out.println("Success!\n");
+			System.out.println("Success!");
 			System.out.println("Ausgabe:");
 			System.out.println( directions.getAllAirports() );
 
 		}
 		if( !isSuccessful ){
-			System.out.println("Bitte Prüfen, das Set an Directs wurde nicht hinzugefügt");
+			System.out.println("Bitte Prüfen, das Set " + directSet + " wurde nicht hinzugefügt");
 		}
-		System.out.println("\n");
 	}
 
-	public void testGetAll(IDirections data){
-
-		System.out.println("\nTest von allen getAll* Methoden:");
-		System.out.println("---------------------------");
+	public static void testGetAll(IDirections data){
 
 		System.out.println("\n getAllSrcs: ");
 		System.out.println( data.getAllSrcs() );
@@ -206,24 +214,86 @@ public class TestDirections {
 
 	}
 
-	public void testGetSrcs(IDirections directions, Airport dst){
+	public static void testGetSrcs(IDirections directions, Airport dst){
 
-		System.out.println("\nTest von getSrcs Methode:");
-		System.out.println("---------------------------\n");
-
-		System.out.println("Ausgabe:");
+		System.out.println();
 		System.out.println( "Destination Airport: " + dst.toString() );
 		System.out.println( "Sources: " + directions.getSrcs(dst) );
 
 
 	}
 
+	public static void testGetDst(IDirections directions, Airport src){
+		System.out.println();
+		System.out.println( "Source Airport: " + src.toString() );
+		System.out.println( "Destinations: " + directions.getDsts(src) );
+	}
 
-	// Creation Method Section
-	// ===================================
+	public static void testGetDst(IDirections directions, Airport src, int changes){
+		System.out.println();
+		System.out.println( "Source Airport: " + src.toString() );
+		System.out.println( "Destinations: " + directions.getDsts(src, changes) );
+	}
 
+	public static void testContains(IDirections directions, Direct direct){
+		System.out.println();
+		boolean isSuccessful = directions.contains(direct);
+		if(isSuccessful) {
+			System.out.println("Success!");
+			System.out.println(direct + " wurde in " + directions.getAllAirports() + " gefunden");
+		}
+		if(!isSuccessful)
+			System.out.println(direct + " wurde nicht in " + directions.getAllAirports() + " gefunden");
+	}
+	public static void testGetBidirectedAirports(IDirections directions){
+		System.out.println();
+		System.out.println( directions.getBidirectedAirports() );
+	}
 
-	public Set<Airport> createTestAirport(){
+	public static void testAddAll(IDirections directions, IDirections other){
+		System.out.println();
+		boolean addAll = directions.addAll(other);
+		if(addAll)
+			System.out.println(other.getAllAirports() + " wurde erfolgreich in " + directions.getAllAirports() + " hinzugefügt");
+		if(!addAll)
+			System.out.println(other.getAllAirports() + " wurde nicht erfolgreich in " +  directions.getAllAirports() +  " hinzugefügt");
+	}
+
+	public static void testRemove(IDirections directions, Direct direct){
+		System.out.println();
+		boolean isSucessful = directions.remove(direct);
+		if(isSucessful)
+			System.out.println(direct + " wurde erfolgreich aus " + directions.getAllAirports() + " entfernt");
+		if(!isSucessful)
+			System.out.println("Bitte prüfen " + direct + " wurde NICHT aus " + directions.getAllAirports() + " entfernt");
+	}
+
+	public static void testGetRoute(IDirections directions, Airport src, Airport dst){
+		System.out.println();
+		System.out.println(directions.getRoute(src, dst));
+	}
+
+	public static void testMinimalRoundTrip(IDirections directions, Airport src){
+		System.out.println();
+		System.out.println(directions.minimalRoundTrip(src));
+	}
+
+	public static void testGetAllDstsInfo(IDirections directions, Airport airport){
+		System.out.println();
+		Map<Integer, Set<Airport>> dummyMap = directions.getAllDstsInfo(airport);
+		System.out.println("Airport: " + airport);
+		for(int i : dummyMap.keySet()){
+			System.out.println("Anzahl der Umstiege: " + i + " erreichbare Airports: " + dummyMap.get(i));
+		}
+	}
+
+	/*
+	 * =========================
+	 *  Create Test Data Section
+	 * =========================
+	 */
+
+	public static Set<Airport> createTestAirport(){
 
 		Set<Airport> airportSet = new LinkedHashSet<>();
 
@@ -239,13 +309,13 @@ public class TestDirections {
 
 	}
 
-	public Set<Direct> createTestDirect(){
+	public static Set<Direct> createTestDirect(){
 
 		Set<Direct> directSet = new LinkedHashSet<>();
 
-		Airport[] airportArr = new Airport[ this.createTestAirport().size() - 1 ];
+		Airport[] airportArr = new Airport[ createTestAirport().size() - 1 ];
 
-		airportArr = this.createTestAirport().toArray(airportArr);
+		airportArr = createTestAirport().toArray(airportArr);
 
 		directSet.add( new Direct( airportArr[0], airportArr[1] )  );
 		directSet.add( new Direct( airportArr[2], airportArr[3] )  );
@@ -254,7 +324,6 @@ public class TestDirections {
 		directSet.add( new Direct( airportArr[4], airportArr[2] )  );
 
 		return directSet;
-
 
 	}
 
