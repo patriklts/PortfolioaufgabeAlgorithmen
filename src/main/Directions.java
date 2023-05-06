@@ -187,12 +187,15 @@ public class Directions implements IDirections  {
 	 */
 	public List<Direct> getRoute( Airport src, Airport dst) {
 		List<Direct> routeList = new ArrayList<>();
-		Airport commonAirport = null;
+		Airport commonAirport;
 
 		//Wenn dst nie erreichbar, return null
 		if( getSrcs(dst).isEmpty() ){
 			return null;
 		}
+		//Wenn für Airport keine erreichbaren Airports hinterlegt sind
+		if(airportDirectMap.get(src) == null)
+			return null;
 
 		//Falls Direktverbindung vorhanden, Basisfall für Rekursion
 		if( airportDirectMap.get(src).contains(new Direct(src, dst)) ){
