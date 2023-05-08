@@ -181,6 +181,11 @@ public class TestDirections {
 		System.out.println("---------------------------");
 		testGetRoute(ownDirections, ownDataAirportSet);
 
+		// Test für getRoute(Airport src, Aiport dst)
+		System.out.println("\n---------------------------");
+		System.out.println("Test von der getRoute Methode mit gegebenen Datensätzen:");
+		System.out.println("---------------------------");
+		testGetRoute(d, givenDataAirportSet);
 
 
 
