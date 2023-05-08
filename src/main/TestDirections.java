@@ -18,7 +18,9 @@ public class TestDirections {
 		Set<Direct> givenDataDirectSet = createGivenDataDirectSet();
 
 		// Initialisierung des Iterators um diesen wieder zurücksetzen zu können
-		Iterator<Airport> iteratorAirport = ownDataAirportSet.iterator();		//Iterator??? TODO
+		Iterator<?> iteratorOwnAirport = ownDataAirportSet.iterator();		//Iterator??? TODO
+		Iterator<?> iteratorOwnDirect = ownDataDirectSet.iterator();
+
 
 		/*
 		 * =========================
@@ -177,10 +179,10 @@ public class TestDirections {
 		System.out.println("\n---------------------------");
 		System.out.println("Test von der getRoute Methode mit eigenen Datensätzen:");
 		System.out.println("---------------------------");
-		iteratorAirport = ownDataAirportSet.iterator();
-		iteratorAirport = nextIterator(iteratorAirport,2);
-		if( iteratorAirport.hasNext() && ownDataAirportSet.iterator().hasNext() )
-				testGetRoute( ownDirections, ownDataAirportSet.iterator().next() , iteratorAirport.next() );
+		iteratorOwnAirport = ownDataAirportSet.iterator();
+		iteratorOwnAirport = nextIterator(iteratorOwnAirport,2);
+		if( iteratorOwnAirport.hasNext() && ownDataAirportSet.iterator().hasNext() )
+				testGetRoute( ownDirections, ownDataAirportSet.iterator().next() , (Airport) iteratorOwnAirport.next() );
 //				testGetRoute(d, new Airport("DME"), new Airport("TPE") );
 
 
@@ -436,7 +438,7 @@ public class TestDirections {
 	 * =========================
 	 */
 
-	public static Iterator<Airport> nextIterator(Iterator<Airport> iterator, int hops){
+	public static Iterator<?> nextIterator(Iterator<?> iterator, int hops){
 		int counter = 0;
 
 		while( iterator.hasNext() && counter <= hops){
