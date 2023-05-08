@@ -11,8 +11,8 @@ public class TestDirections {
 		IDirections ownDirections = new Directions();			//Eigene Instanz von Directions für eigene Test-Daten
 
 		//Sets mit eigenen erstellen Test-Daten
-		Set<Airport> ownDataAirportSet = createTestAirport();
-		Set<Direct> ownDataDirectSet =  createTestDirect();
+		Set<Airport> ownDataAirportSet = createOwnTestAirport();
+		Set<Direct> ownDataDirectSet =  createOwnTestDirect();
 		//Set mit Daten aus Data.java
 		Set<Airport> givenDataAirportSet = createGivenDataAirportSet();
 		Set<Direct> givenDataDirectSet = createGivenDataDirectSet();
@@ -51,7 +51,7 @@ public class TestDirections {
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect:");
 		System.out.println("---------------------------");
-		ownDataDirectSet.forEach(direct -> testAddDirectSingle(ownDirections, direct));
+		ownDataDirectSet.forEach(direct -> testAddDirect(ownDirections, direct));
 
 
 
@@ -175,15 +175,12 @@ public class TestDirections {
 
 
 
-		//Test für getRoute(Airport src, Airport dst)					//TODO ganz komische Testmethode -> Man müsste jegliche Kombinationsmöglichkeit reinwerfen HOW?!!!!
+		//Test für getRoute(Airport src, Airport dst)
 		System.out.println("\n---------------------------");
 		System.out.println("Test von der getRoute Methode mit eigenen Datensätzen:");
 		System.out.println("---------------------------");
-		iteratorOwnAirport = ownDataAirportSet.iterator();
-		iteratorOwnAirport = nextIterator(iteratorOwnAirport,2);
-		if( iteratorOwnAirport.hasNext() && ownDataAirportSet.iterator().hasNext() )
-				testGetRoute( ownDirections, ownDataAirportSet.iterator().next() , (Airport) iteratorOwnAirport.next() );
-//				testGetRoute(d, new Airport("DME"), new Airport("TPE") );
+		testGetRoute(ownDirections, ownDataAirportSet);
+
 
 
 
@@ -232,7 +229,7 @@ public class TestDirections {
 		System.out.println( direct );
 	}
 
-	public static void testAddDirectSingle(IDirections directions, Direct d){
+	public static void testAddDirect(IDirections directions, Direct d){
 
 		boolean isSuccessful = directions.add(d);
 		if( isSuccessful ) {
@@ -330,11 +327,17 @@ public class TestDirections {
 			System.out.println("Bitte prüfen " + direct + " wurde NICHT aus " + directions.getAllAirports() + " entfernt");
 	}
 
-	public static void testGetRoute(IDirections directions, Airport src, Airport dst){
+	public static void testGetRoute(IDirections directions, Set<Airport> setOfAirport){
 		System.out.println();
-		System.out.println("Airport Source: " + src);
-		System.out.println("Airport Destination: "+ dst);
-		System.out.println(directions.getRoute(src, dst));
+		Airport[] ownAirportArray= new Airport[ setOfAirport.size() -1 ];
+		ownAirportArray = setOfAirport.toArray(ownAirportArray);
+		for(int i = 0; i <= (ownAirportArray.length -1); i++ ) {
+			for (int j = i + 1; j <= (ownAirportArray.length - 1); j++){
+				System.out.println("Airport Source: " + ownAirportArray[i]);
+				System.out.println("Airport Destination: " +ownAirportArray[j]);
+				System.out.println(directions.getRoute(ownAirportArray[i], ownAirportArray[j]));
+			}
+		}
 	}
 
 	public static void testMinimalRoundTrip(IDirections directions, Airport src){
@@ -357,7 +360,7 @@ public class TestDirections {
 	 * =========================
 	 */
 
-	public static Set<Airport> createTestAirport(){
+	public static Set<Airport> createOwnTestAirport(){
 
 		Set<Airport> airportSet = new LinkedHashSet<>();
 
@@ -373,13 +376,13 @@ public class TestDirections {
 
 	}
 
-	public static Set<Direct> createTestDirect(){
+	public static Set<Direct> createOwnTestDirect(){
 
 		Set<Direct> directSet = new LinkedHashSet<>();
 
-		Airport[] airportArr = new Airport[ createTestAirport().size() - 1 ];
+		Airport[] airportArr = new Airport[ createOwnTestAirport().size() - 1 ];
 
-		airportArr = createTestAirport().toArray(airportArr);
+		airportArr = createOwnTestAirport().toArray(airportArr);
 
 		directSet.add( new Direct( airportArr[0], airportArr[1] )  );
 		directSet.add( new Direct( airportArr[2], airportArr[3] )  );
@@ -441,7 +444,7 @@ public class TestDirections {
 	public static Iterator<?> nextIterator(Iterator<?> iterator, int hops){
 		int counter = 0;
 
-		while( iterator.hasNext() && counter <= hops){
+		while( iterator.hasNext() && counter < hops ){
 			counter++;
 			iterator.next();
 		}
