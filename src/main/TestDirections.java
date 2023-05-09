@@ -21,6 +21,9 @@ public class TestDirections {
 
 
 		// Testaufruf um die toString Methoden zu testen
+		/* Kontrollwerte:
+		 *
+		 */
 		System.out.println("---------------------------");
 		System.out.println("Test von toString-Methoden mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
@@ -31,7 +34,6 @@ public class TestDirections {
 
 		// Testaufruf um die add Methode zu testen
 		/*
-		Beispie
 		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect:");
@@ -46,7 +48,7 @@ public class TestDirections {
 
 		// Testaufruf der getAll-Methoden
 		System.out.println("\n---------------------------");
-		System.out.println("Test von allen getAll* Methoden mit eigenen Datensätzen:");
+		System.out.println("Test von allen getAll* Methoden mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		testGetAll(d);
 
@@ -84,42 +86,68 @@ public class TestDirections {
 		givenDataDirectSet.forEach(direct -> testContains(d, direct ));
 
 		//Test für getBidirectedAirports()
+		/* Kontrollwerte:
+		 * <[[DME, CSX], [FKB, CSX], [XYZ, ABC]]>
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von BiDirectedAirports Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		testGetBidirectedAirports(d);
 
-		//Test für minimalRoundtrip(Airport src)
+		// Test für minimalRoundtrip(Airport src)
+		/* Kontrollwerte:
+		 * <ORD, null>, <DME, [DME, CSX, DME]>, <ZRH, [ZRH, TPE, AGP, ZRH]>, <null, null>
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von der minimalRoundTrip Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		givenDataAirportSet.forEach( airport -> testMinimalRoundTrip(d, airport) );
+		testMinimalRoundTrip(d, null);
 
-		//Test für addAll(IDirections other)
+		// Test für addAll(IDirections other)
+		/* Kontrollwerte:
+		 * 1.<[BGH, MUN, HN, KA], true>, 2.<[BGH, MUN, HN, KA]>, <null, false>
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addAll (Interface IDirections DatenTyp) Methode:");
 		System.out.println("---------------------------");
 		IDirections other = setUpAnotherIDirections();
 		testAddAll(d, other);
+		testAddAll(d, other);
+		testAddAll(d, null);
 
-		// Test für getRoute(Airport src, Aiport dst)
+		// Test für getRoute(Airport src, Airport dst)
+		/* Kontrollwerte:
+		 * <ORD, DME, []>, <DME, ORD, [DME->ORD]>,
+		 * <DME, AGP, [DME->ZRH, ZRH->TPE, TPE->AGP]>, <null, null, []>
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von der getRoute Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		testGetRoute(d, givenDataAirportSet);
+		System.out.println(d.getRoute(null,null));
 
-		//Test für getAllDstsInfo
+		// Test für getAllDstsInfo
+		/* Kontrollwerte:
+		 * <ORD, 0: []>, <CSX, 0: [DME] 1: [ORD, CSX, FKB, ZRH] 2: [TPE] 3: [AGP]>,
+		 * <AGP, 0: [ZRH] 1: [TPE, FKB] 2: [AGP, CSX] 3: [DME] 4: [ORD]>, <null, 0: []>
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von der getAllDstsInfo Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		givenDataAirportSet.forEach(airport -> testGetAllDstsInfo(d, airport));
+		testGetAllDstsInfo(d, null);
 
-		//Test für remove(Direct d)
+		// Test für remove(Direct d)
+		/* Kontrollwerte:
+		 * <DME-CSX, true>, <ZRH->TPE, true>, 1.<FKB->CSX, true>, 2.<FKB->CSX, false>, <null, false>
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von der remove Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		givenDataDirectSet.forEach(direct -> testRemove(d, direct));
 		testRemove(d, new Direct(new Airport("FKB"), new Airport("CSX") ) );
+		testRemove(d, null);
 	}
 
 
@@ -227,6 +255,7 @@ public class TestDirections {
 			System.out.println(direct + " wurde erfolgreich entfernt. Aktuelle Struktur: " + directions.getAllAirports());
 		if(!isSuccessful)
 			System.out.println("Bitte prüfen " + direct + " wurde NICHT aus " + directions.getAllAirports() + " entfernt");
+
 	}
 
 	public static void testGetRoute(IDirections directions, Set<Airport> setOfAirport){

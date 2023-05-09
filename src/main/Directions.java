@@ -13,6 +13,9 @@ public class Directions implements IDirections  {
      *   returns true if directions changes, false if not
      */
     public boolean add( Direct d ) {
+		if(d == null || d.getDst() == null || d.getSrc() == null)
+			return false;
+
 		//Falls für Src-Airport noch kein Set hinterlegt, HashSet anlegen
 		airportDirectMap.computeIfAbsent(d.getSrc(), k -> new HashSet<>());
 
@@ -42,6 +45,7 @@ public class Directions implements IDirections  {
 	//Lösung ist O(n^2) → sehr teuer und schlecht.
 	//Besser wäre Lösung über getAllDirects() oder map.values(), aber wegen Interface nicht möglich
     public boolean addAll( IDirections other ) {
+
 		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
