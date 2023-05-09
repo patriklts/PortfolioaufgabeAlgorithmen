@@ -31,6 +31,9 @@ public class Directions implements IDirections  {
 		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
+		if( d == null || d.isEmpty() || !(d.iterator().hasNext()) )
+			return hasAdded;
+
 		//Set durchlaufen und für jedes Element add() aufrufen, wenn Element hinzugefügt: hasAdded -> true
 		for(Direct direct : d) {
 			if( add(direct) )
@@ -45,7 +48,8 @@ public class Directions implements IDirections  {
 	//Lösung ist O(n^2) → sehr teuer und schlecht.
 	//Besser wäre Lösung über getAllDirects() oder map.values(), aber wegen Interface nicht möglich
     public boolean addAll( IDirections other ) {
-
+		if( other == null )
+			return false;
 		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
@@ -72,6 +76,8 @@ public class Directions implements IDirections  {
      */
     public boolean remove( Direct d ) {
 		//Nur wenn Direct vorhanden aus Map entfernen
+		if(d == null || d.getSrc() == null || d.getDst() == null)
+			return false;
 		if( contains(d) ){
 			Set<Direct> directSet = airportDirectMap.get(d.getSrc());
 			directSet.remove(d);
@@ -81,6 +87,9 @@ public class Directions implements IDirections  {
     }
     
     public boolean contains( Direct d ) {
+		if(d == null || d.getDst() == null || d.getSrc() == null)
+			return false;
+
 		Set<Direct> directSet = airportDirectMap.get(d.getSrc());
 		//Wenn für den SrcAirport kein Set hinterlegt → Null abfangen und return false
 		if(directSet == null)
