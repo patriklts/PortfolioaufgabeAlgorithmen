@@ -29,23 +29,17 @@ public class TestDirections {
 		System.out.println("Ausgabe Directs: ");
 		givenDataDirectSet.forEach(TestDirections::testToString);
 
-
-
 		// Testaufruf um die add Methode zu testen
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect:");
 		System.out.println("---------------------------");
 		givenDataDirectSet.forEach(direct -> testAddDirect(d,  direct));
 
-
-
 		// Testaufruf um die Add(Set) Methode zu testen
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect(Set):");
 		System.out.println("---------------------------");
 		testAddDirect(d, givenDataDirectSet);
-
-
 
 		// Testaufruf der getAll-Methoden
 		System.out.println("\n---------------------------");
@@ -57,8 +51,6 @@ public class TestDirections {
 		//getAllDsts Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, ORD, FKB]
 		//getAllAirport Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, ORD, FKB]
 
-
-
 		// Testaufruf der getSrcs Methode
 		System.out.println("\n---------------------------");
 		System.out.println("Test von getSrcs Methode mit eigenen Datensätzen:");
@@ -66,19 +58,12 @@ public class TestDirections {
 		System.out.println("Ausgabe:");
 		givenDataAirportSet.forEach(airport -> testGetSrcs(d, airport));
 
-
-
-
-
 		// Testaufruf der GetDst Methode
-
 		System.out.println("\n---------------------------");
 		System.out.println("Test von getDst Methode mit gegeben Datensätzen:");
 		System.out.println("---------------------------");
 		System.out.println("Ausgabe:");
 		givenDataAirportSet.forEach(airport -> testGetDst(d, airport));
-
-
 
 		//Test für getDsts(Airport src, int numChanges)
 		int changes = (int) (Math.random() *10) -1 ;
@@ -89,16 +74,11 @@ public class TestDirections {
 		System.out.println("Anzahl Changes: " + changes);
 		givenDataAirportSet.forEach(airport -> testGetDst( d, airport, changes ) );
 
-
-
 		//Test für contains(Direct d)
-
 		System.out.println("\n---------------------------");
 		System.out.println("Test von contains Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		givenDataDirectSet.forEach(direct -> testContains(d, direct ));
-
-
 
 		//Test für getBidirectedAirports()
 		System.out.println("\n---------------------------");
@@ -106,16 +86,11 @@ public class TestDirections {
 		System.out.println("---------------------------");
 		testGetBidirectedAirports(d);
 
-
-
 		//Test für minimalRoundtrip(Airport src)
-
 		System.out.println("\n---------------------------");
 		System.out.println("Test von der minimalRoundTrip Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		givenDataAirportSet.forEach( airport -> testMinimalRoundTrip(d, airport) );
-
-
 
 		//Test für addAll(IDirections other)
 		System.out.println("\n---------------------------");
@@ -124,22 +99,17 @@ public class TestDirections {
 		IDirections other = setUpAnotherIDirections();
 		testAddAll(d, other);
 
-
 		// Test für getRoute(Airport src, Aiport dst)
 		System.out.println("\n---------------------------");
 		System.out.println("Test von der getRoute Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		testGetRoute(d, givenDataAirportSet);
 
-
-
 		//Test für getAllDstsInfo
 		System.out.println("\n---------------------------");
 		System.out.println("Test von der getAllDstsInfo Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		givenDataAirportSet.forEach(airport -> testGetAllDstsInfo(d, airport));
-
-
 
 		//Test für remove(Direct d)
 		System.out.println("\n---------------------------");
