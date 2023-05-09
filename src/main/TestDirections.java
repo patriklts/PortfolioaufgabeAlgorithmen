@@ -1,11 +1,11 @@
+ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class TestDirections {
-
-
 	public static void main(String[] args){
+
 		IDirections d = Data.data();			//Daten aus Data
 
 		//Set mit Daten aus Data.java
@@ -21,6 +21,13 @@ public class TestDirections {
 
 
 		// Testaufruf um die toString Methoden zu testen
+		/* Kontrollwerte:
+		 * Airports:
+		 * DME, CSX, FKB, ORD, ZRH, TPE, AGP, XYZ, ABC
+		 * Directs:
+		 * DME->CSX, DME->FKB, DME->ORD
+		 *
+		 */
 		System.out.println("---------------------------");
 		System.out.println("Test von toString-Methoden mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
@@ -31,18 +38,23 @@ public class TestDirections {
 
 		// Testaufruf um die add Methode zu testen
 		/*
-		Beispie
+		 *
 		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect:");
 		System.out.println("---------------------------");
 		givenDataDirectSet.forEach(direct -> testAddDirect(d,  direct));
+		testAddDirect(d, new Direct(null, null));
+		testAddDirect(new Directions(), new Direct(new Airport("FRA"), new Airport("ZRH")));
+		testAddDirect(new Directions(), new Direct(new Airport("Test1"), new Airport("Test2")));
 
 		// Testaufruf um die Add(Set) Methode zu testen
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect(Set):");
 		System.out.println("---------------------------");
 		testAddDirect(d, givenDataDirectSet);
+		testAddDirect(new Directions(), new HashSet<>());
+
 
 		// Testaufruf der getAll-Methoden
 		System.out.println("\n---------------------------");
@@ -150,12 +162,15 @@ public class TestDirections {
 		}
 		if( !isSuccessful )
 			System.out.println("Bitte Prüfen, der Direct " + d + " wurde nicht hinzugefügt");
-
 		System.out.println("\n");
 	}
 
 	public static void testAddDirect(IDirections directions, Set<Direct> directSet){
 		System.out.println();
+		if( directSet == null ) {
+			System.out.println("Set is Null!");
+			return;
+		}
 		boolean isSuccessful = directions.add( directSet );
 		if( isSuccessful) {
 			System.out.println("Success!");
@@ -215,7 +230,7 @@ public class TestDirections {
 		System.out.println();
 		boolean addAll = directions.addAll(other);
 		if(addAll)
-			System.out.println(other.getAllAirports() + " wurde erfolgreich hinzugefügt. Aktuelle Struktur: " + directions.getAllAirports());
+			System.out.println(other.getAllAirports() + " wurde erfolgreich hinzugefügt.\nAktuelle Struktur: " + directions.getAllAirports());
 		if(!addAll)
 			System.out.println(other.getAllAirports() + " wurde nicht erfolgreich in " +  directions.getAllAirports() +  " hinzugefügt");
 	}
@@ -224,7 +239,7 @@ public class TestDirections {
 		System.out.println();
 		boolean isSuccessful = directions.remove(direct);
 		if(isSuccessful)
-			System.out.println(direct + " wurde erfolgreich entfernt. Aktuelle Struktur: " + directions.getAllAirports());
+			System.out.println(direct + " wurde erfolgreich entfernt. \nAktuelle Struktur: " + directions.getAllAirports());
 		if(!isSuccessful)
 			System.out.println("Bitte prüfen " + direct + " wurde NICHT aus " + directions.getAllAirports() + " entfernt");
 	}
@@ -238,6 +253,7 @@ public class TestDirections {
 				System.out.println("Airport Source: " + ownAirportArray[i]);
 				System.out.println("Airport Destination: " +ownAirportArray[j]);
 				System.out.println(directions.getRoute(ownAirportArray[i], ownAirportArray[j]));
+				System.out.println();
 			}
 		}
 	}
