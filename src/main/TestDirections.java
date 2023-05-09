@@ -30,6 +30,9 @@ public class TestDirections {
 		givenDataDirectSet.forEach(TestDirections::testToString);
 
 		// Testaufruf um die add Methode zu testen
+		/*
+		Beispie
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect:");
 		System.out.println("---------------------------");
@@ -130,7 +133,6 @@ public class TestDirections {
 	public static void testToString(Airport a1){
 		System.out.println( a1 );
 		//System.out.println( new Direct(a1, a2 ) );
-
 	}
 
 	public static void testToString(Direct direct){
