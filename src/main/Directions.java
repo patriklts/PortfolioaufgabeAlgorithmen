@@ -5,6 +5,8 @@ import java.util.*;
  */
 public class Directions implements IDirections  {
 
+
+
 	//HashMap für Zuordnung von Start-Airport und Set der Directions von diesem
     private final Map<Airport, Set<Direct>> airportDirectMap = new HashMap<>();
 
@@ -48,10 +50,12 @@ public class Directions implements IDirections  {
 	//Lösung ist O(n^2) → sehr teuer und schlecht.
 	//Besser wäre Lösung über getAllDirects() oder map.values(), aber wegen Interface nicht möglich
     public boolean addAll( IDirections other ) {
-		if( other == null )
-			return false;
+
 		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
+
+		if( other == null )
+			return hasAdded;
 
 		//Alle Srcs und Dsts Airports von other in Set abspeichern
 		Set<Airport> airportsSrcsSet = other.getAllSrcs();
@@ -75,9 +79,9 @@ public class Directions implements IDirections  {
      *    returns true if directions changes, false if not
      */
     public boolean remove( Direct d ) {
-		//Nur wenn Direct vorhanden aus Map entfernen
 		if(d == null || d.getSrc() == null || d.getDst() == null)
 			return false;
+		//Nur wenn Direct vorhanden aus Map entfernen
 		if( contains(d) ){
 			Set<Direct> directSet = airportDirectMap.get(d.getSrc());
 			directSet.remove(d);
@@ -136,6 +140,8 @@ public class Directions implements IDirections  {
      *    (empty set of there are no such)
      */
 	public Set<Airport> getDsts( Airport src ){
+		if(src == null)
+			return new HashSet<>();
 		Set<Airport> dstsAirports = new HashSet<>();
 
 		Set<Direct> directSet = airportDirectMap.get(src);
@@ -154,6 +160,8 @@ public class Directions implements IDirections  {
 	 *    (empty set if there are no such)
 	 */
 	public Set<Airport> getSrcs( Airport dst ){
+		if(dst == null)
+			return new HashSet<>();
 		Set<Airport> srcsAirports = new HashSet<>();
 
 		//Jedes Direct durchlaufen und wenn DstAirport übereinstimmt → SrcAirport dem RückgabeSet hinzufügen
@@ -169,6 +177,8 @@ public class Directions implements IDirections  {
 	 *    and not reachable with fewer changes (0 = direct)
 	 */
 	public Set<Airport> getDsts( Airport src, int numChanges ){
+		if(src == null )
+			return new HashSet<>();
 		//Set sofort mit den direkt erreichbaren Airports initialisieren
 		Set<Airport> airportSet = new HashSet<>(getDsts(src));
 
@@ -199,6 +209,8 @@ public class Directions implements IDirections  {
 	 * Basisfall ist direkte Verbindung von SrcAirport zu DstAirport
 	 */
 	public List<Direct> getRoute( Airport src, Airport dst) {
+		if(src == null || dst == null)
+			return new ArrayList<>();
 		List<Direct> routeList = new ArrayList<>();
 		Airport commonAirport;
 
@@ -262,6 +274,8 @@ public class Directions implements IDirections  {
 	 *    (if no such exists, return null)
 	 */
 	public List<Airport> minimalRoundTrip( Airport src ){
+		if(src == null )
+			return new ArrayList<>();
 		//Idee: Roundtrip ist identisch wie Berechnung von optimaler Route von src nach src
 		List<Airport> airportList = new ArrayList<>();
 
@@ -282,6 +296,8 @@ public class Directions implements IDirections  {
 	}
 
 	public Map<Integer, Set<Airport>> getAllDstsInfo(Airport src){
+		if(src == null)
+			return new HashMap<>();
 		//Map für Rückgabe und Set in dem alle bereits in Map enthaltenen Airports gespeichert werden
 		Map<Integer, Set<Airport>> myMap = new HashMap<>();
 		Set<Airport> airportsAlreadyInMap = new HashSet<>(getDsts(src));
