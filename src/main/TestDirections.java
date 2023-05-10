@@ -360,7 +360,7 @@ public class TestDirections {
 
 	public static void testMinimalRoundTrip(IDirections directions, Airport src){
 		//Test, ob eine der Objektparameter auf null verweist
-		if(nullPointerCheck(directions, src)){
+		if(nullPointerCheck(directions)){
 			System.out.println("Objekt null!");
 			return;
 		}
@@ -371,7 +371,7 @@ public class TestDirections {
 
 	public static void testGetAllDstsInfo(IDirections directions, Airport airport){
 		//Test, ob eine der Objektparameter auf null verweist
-		if(nullPointerCheck(directions, airport)){
+		if(nullPointerCheck(directions)){
 			System.out.println("Objekt null!");
 			return;
 		}
