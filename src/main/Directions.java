@@ -1,5 +1,3 @@
-import jdk.incubator.vector.VectorOperators;
-
 import java.util.*;
 
 /*
@@ -56,7 +54,7 @@ public class Directions implements IDirections  {
 		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
-		if(TestDirections.nullPointerCheck(other, ))
+		if(TestDirections.nullPointerCheck(other ))
 			return hasAdded;
 
 		//Alle Srcs und Dsts Airports von other in Set abspeichern
