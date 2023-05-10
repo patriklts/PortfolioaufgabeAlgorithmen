@@ -29,7 +29,7 @@ public class TestDirections {
 		 *
 		 */
 		System.out.println("---------------------------");
-		System.out.println("Test von toString-Methoden mit gegebenen Datensätzen:");
+		System.out.println("Test von toString-Methoden:");
 		System.out.println("---------------------------");
 		System.out.println("Ausgabe Airports: ");
 		givenDataAirportSet.forEach(TestDirections::testToString);
@@ -54,6 +54,7 @@ public class TestDirections {
 		/* Kontrollwerte:
 		 * Für d alles false, da bereits enthalten.
 		 * Für neues Directions sollten alle Werte hinzugefügt werden.
+		 * Für leeres Set, false.
 		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect(Set):");
@@ -69,17 +70,17 @@ public class TestDirections {
 		 * getAllAirport Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, ORD, FKB]
 		 */
 		System.out.println("\n---------------------------");
-		System.out.println("Test von allen getAll* Methoden mit gegebenen Datensätzen:");
+		System.out.println("Test von allen getAll* Methoden:");
 		System.out.println("---------------------------");
 		testGetAll(d);
 		testGetAll(null);
 
 		// Testaufruf der getSrcs Methode
 		/* Kontrollwerte:
-		 * <null, []>, <ABC, XYZ>, <FKB, [DME, CSX, ZRH]>
+		 * <null, []>, <ABC, XYZ>, <FKB, [DME, ZRH]>
 		 */
 		System.out.println("\n---------------------------");
-		System.out.println("Test von getSrcs Methode mit gegebenen Datensätzen:");
+		System.out.println("Test von getSrcs Methode:");
 		System.out.println("---------------------------");
 		System.out.println("Ausgabe:");
 		givenDataAirportSet.forEach(airport -> testGetSrcs(d, airport));
@@ -87,12 +88,12 @@ public class TestDirections {
 		testGetSrcs(d, null);
 		testGetSrcs(null, new Airport("JFK"));
 
-		// Testaufruf der GetDst Methode
+		// Testaufruf der getDst Methode
 		/* Kontrollwerte:
-		 * <null, []>, <ABC, [XYZ]>, <FKB, [CSX]>, <DME, [CSX, FKB, ORD, ZRH]>
+		 * <null, []>, <ORD, []>, <FKB, [CSX]>, <DME, [CSX, FKB, ORD, ZRH]>
 		 */
 		System.out.println("\n---------------------------");
-		System.out.println("Test von getDst Methode mit gegebenen Datensätzen:");
+		System.out.println("Test von getDst Methode:");
 		System.out.println("---------------------------");
 		System.out.println("Ausgabe:");
 		givenDataAirportSet.forEach(airport -> testGetDst(d, airport));
@@ -106,7 +107,7 @@ public class TestDirections {
 		 */
 		int changes = 2;
 		System.out.println("\n---------------------------");
-		System.out.println("Test von getDst-Methode mit angabe Changes mit gegebenen Datensätzen:");
+		System.out.println("Test von getDst-Methode mit angabe Changes:");
 		System.out.println("---------------------------");
 		System.out.println("Ausgabe:");
 		System.out.println("Anzahl Changes: " + changes);
@@ -117,31 +118,32 @@ public class TestDirections {
 
 		// Test für contains(Direct d)
 		/* Kontrollwerte:
-		 * <null, false>, <ABC->XYZ, true>, <FKB->DME, false>
+		 * <null, false>, <ABC->XYZ, true>, <JFK->ZRH, false>
 		 */
 		System.out.println("\n---------------------------");
-		System.out.println("Test von contains Methode mit gegebenen Datensätzen:");
+		System.out.println("Test von contains Methode:");
 		System.out.println("---------------------------");
 		givenDataDirectSet.forEach(direct -> testContains(d, direct ));
-		testContains(null, new Direct(new Airport("JFK"), new Airport("ZRH")));
+		testContains(d, new Direct( new Airport("JFK"), new Airport("ZRH") ) );
+		testContains(null, new Direct( new Airport("JFK"), new Airport("ZRH") ) );
 		testContains(d, null);
 
 		// Test für getBidirectedAirports()
 		/* Kontrollwerte:
-		 * <[[DME, CSX], [FKB, CSX], [XYZ, ABC]]>
+		 * <[[DME, CSX], [XYZ, ABC]]>
 		 */
 		System.out.println("\n---------------------------");
-		System.out.println("Test von BiDirectedAirports Methode mit gegebenen Datensätzen:");
+		System.out.println("Test von BiDirectedAirports Methode:");
 		System.out.println("---------------------------");
 		testGetBidirectedAirports(d);
 		testGetBidirectedAirports(null);
 
 		// Test für minimalRoundtrip(Airport src)
 		/* Kontrollwerte:
-		 * <ORD, null>, <DME, [DME, CSX, DME]>, <ZRH, [ZRH, TPE, AGP, ZRH]>, <null, null>
+		 * <ORD, null>, <DME, [DME, CSX, DME]>, <ZRH, [ZRH, TPE, AGP, ZRH]>, <null, []>
 		 */
 		System.out.println("\n---------------------------");
-		System.out.println("Test von der minimalRoundTrip Methode mit gegebenen Datensätzen:");
+		System.out.println("Test von der minimalRoundTrip Methode:");
 		System.out.println("---------------------------");
 		givenDataAirportSet.forEach( airport -> testMinimalRoundTrip(d, airport) );
 		testMinimalRoundTrip(d, null);
@@ -149,11 +151,11 @@ public class TestDirections {
 
 		// Test für getRoute(Airport src, Airport dst)
 		/* Kontrollwerte:
-		 * <ORD, DME, []>, <DME, ORD, [DME->ORD]>,
-		 * <DME, AGP, [DME->ZRH, ZRH->TPE, TPE->AGP]>, <null, null, []>
+		 * <ORD, TPE, null>, <DME, ORD, [DME->ORD]>,
+		 * <DME, AGP, [DME->ZRH, ZRH->TPE, TPE->AGP]>, <null, null, null>
 		 */
 		System.out.println("\n---------------------------");
-		System.out.println("Test von der getRoute Methode mit gegebenen Datensätzen:");
+		System.out.println("Test von der getRoute Methode:");
 		System.out.println("---------------------------");
 		testGetRoute(d, givenDataAirportSet);
 		testGetRoute(null, null);
@@ -163,10 +165,10 @@ public class TestDirections {
 		// Test für getAllDstsInfo
 		/* Kontrollwerte:
 		 * <ORD, 0: []>, <CSX, 0: [DME] 1: [ORD, CSX, FKB, ZRH] 2: [TPE] 3: [AGP]>,
-		 * <AGP, 0: [ZRH] 1: [TPE, FKB] 2: [AGP, CSX] 3: [DME] 4: [ORD]>, <null, 0: []>
+		 * <AGP, 0: [ZRH] 1: [TPE, FKB] 2: [AGP, CSX] 3: [DME] 4: [ORD]>, <null, keine Ausgabe>
 		 */
 		System.out.println("\n---------------------------");
-		System.out.println("Test von der getAllDstsInfo Methode mit gegebenen Datensätzen:");
+		System.out.println("Test von der getAllDstsInfo Methode:");
 		System.out.println("---------------------------");
 		givenDataAirportSet.forEach(airport -> testGetAllDstsInfo(d, airport));
 		testGetAllDstsInfo(d, null);
@@ -177,7 +179,7 @@ public class TestDirections {
 		 * <DME-CSX, true>, <ZRH->TPE, true>, 1.<FKB->CSX, true>, 2.<FKB->CSX, false>, <null, false>
 		 */
 		System.out.println("\n---------------------------");
-		System.out.println("Test von der remove Methode mit gegebenen Datensätzen:");
+		System.out.println("Test von der remove Methode:");
 		System.out.println("---------------------------");
 		givenDataDirectSet.forEach(direct -> testRemove(d, direct));
 		testRemove(d, new Direct(new Airport("FKB"), new Airport("CSX") ) );
@@ -265,34 +267,34 @@ public class TestDirections {
 	}
 
 	public static void testGetSrcs(IDirections directions, Airport dst){
-		if(nullPointerCheck(directions, dst)){
+		if(nullPointerCheck(directions)){
 			System.out.println("Objekt null!");
 			return;
 		}
 		System.out.println();
-		System.out.println( "Destination Airport: " + dst.toString() );
+		System.out.println( "Destination Airport: " + dst );
 		System.out.println( "Sources: " + directions.getSrcs(dst) );
 	}
 
 	public static void testGetDst(IDirections directions, Airport src){
-		if(nullPointerCheck(directions, src)){
+		if(nullPointerCheck(directions)){
 			System.out.println("Objekt null!");
 			return;
 		}
 		System.out.println();
-		System.out.println( "Source Airport: " + src.toString() );
+		System.out.println( "Source Airport: " + src );
 		System.out.println( "Destinations: " + directions.getDsts(src) );
 	}
 
 	public static void testGetDst(IDirections directions, Airport src, int changes){
 		//Test, ob eine der Objektparameter auf null verweist
-		if( nullPointerCheck(directions, src)  ) {
+		if( nullPointerCheck(directions)  ) {
 			System.out.println("Objekt null!");
 			return;
 		}
 
 		System.out.println();
-		System.out.println( "Source Airport: " + src.toString() );
+		System.out.println( "Source Airport: " + src );
 		System.out.println( "Destinations: " + directions.getDsts(src, changes) );
 	}
 
@@ -326,7 +328,7 @@ public class TestDirections {
 
 	public static void testAddAll(IDirections directions, IDirections other){
 		//Test, ob eine der Objektparameter auf null verweist
-		if( nullPointerCheck(directions) ) {
+		if( nullPointerCheck(directions, other) ) {
 			System.out.println("Objekt null!");
 			return;
 		}
@@ -372,6 +374,10 @@ public class TestDirections {
 				System.out.println();
 			}
 		}
+		System.out.println("Airport Source: " + null);
+		System.out.println("Airport Destination: " + null);
+		System.out.println(directions.getRoute(null, null));
+		System.out.println();
 	}
 
 	public static void testMinimalRoundTrip(IDirections directions, Airport src){

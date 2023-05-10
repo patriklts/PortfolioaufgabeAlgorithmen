@@ -79,7 +79,9 @@ public class Directions implements IDirections  {
      *    returns true if directions changes, false if not
      */
     public boolean remove( Direct d ) {
-		if( nullPointerCheck( d, d.getDst(), d.getSrc() ) )
+		if(d == null)
+			return false;
+		if( nullPointerCheck( d.getDst(), d.getSrc() ) )
 			return false;
 		//Nur wenn Direct vorhanden aus Map entfernen
 		if( contains(d) ){
@@ -91,7 +93,9 @@ public class Directions implements IDirections  {
     }
     
     public boolean contains( Direct d ) {
-		if(nullPointerCheck( d, d.getSrc(), d.getDst() ) )
+		if(d == null)
+			return false;
+		if(nullPointerCheck( d.getSrc(), d.getDst() ) )
 			return false;
 
 		Set<Direct> directSet = airportDirectMap.get(d.getSrc());
@@ -210,7 +214,7 @@ public class Directions implements IDirections  {
 	 */
 	public List<Direct> getRoute( Airport src, Airport dst) {
 		if( nullPointerCheck(src, dst) )
-			return new ArrayList<>();
+			return null;
 		List<Direct> routeList = new ArrayList<>();
 		Airport commonAirport;
 
