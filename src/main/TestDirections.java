@@ -470,7 +470,7 @@ public class TestDirections {
 		return otherDirections;
 	}
 	
-	public static boolean nullPointerCheck(Object ... testObject){
+	private static boolean nullPointerCheck(Object ... testObject){
 		for(int i = 0; i <= testObject.length -1; i++) {
 			if (testObject[i] == null)
 				return true;
