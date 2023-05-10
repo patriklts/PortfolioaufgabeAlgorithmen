@@ -15,7 +15,7 @@ public class Directions implements IDirections  {
      *   returns true if directions changes, false if not
      */
     public boolean add( Direct d ) {
-		if(TestDirections.nullPointerCheck(d, d.getSrc(), d.getDst()))
+		if(nullPointerCheck(d, d.getSrc(), d.getDst()))
 			return false;
 
 		//Falls für Src-Airport noch kein Set hinterlegt, HashSet anlegen
@@ -33,7 +33,7 @@ public class Directions implements IDirections  {
 		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
-		if(TestDirections.nullPointerCheck(d))
+		if(nullPointerCheck(d) || d.isEmpty())
 			return hasAdded;
 
 		//Set durchlaufen und für jedes Element add() aufrufen, wenn Element hinzugefügt: hasAdded -> true
@@ -54,7 +54,7 @@ public class Directions implements IDirections  {
 		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
-		if(TestDirections.nullPointerCheck(other ))
+		if(nullPointerCheck(other))
 			return hasAdded;
 
 		//Alle Srcs und Dsts Airports von other in Set abspeichern
@@ -79,7 +79,7 @@ public class Directions implements IDirections  {
      *    returns true if directions changes, false if not
      */
     public boolean remove( Direct d ) {
-		if( TestDirections.nullPointerCheck( d, d.getDst(), d.getSrc() ) )
+		if( nullPointerCheck( d, d.getDst(), d.getSrc() ) )
 			return false;
 		//Nur wenn Direct vorhanden aus Map entfernen
 		if( contains(d) ){
@@ -91,7 +91,7 @@ public class Directions implements IDirections  {
     }
     
     public boolean contains( Direct d ) {
-		if(TestDirections.nullPointerCheck( d, d.getSrc(), d.getDst() ) )
+		if(nullPointerCheck( d, d.getSrc(), d.getDst() ) )
 			return false;
 
 		Set<Direct> directSet = airportDirectMap.get(d.getSrc());
@@ -140,7 +140,7 @@ public class Directions implements IDirections  {
      *    (empty set of there are no such)
      */
 	public Set<Airport> getDsts( Airport src ){
-		if(TestDirections.nullPointerCheck(src))
+		if(nullPointerCheck(src))
 			return new HashSet<>();
 		Set<Airport> dstsAirports = new HashSet<>();
 
@@ -160,7 +160,7 @@ public class Directions implements IDirections  {
 	 *    (empty set if there are no such)
 	 */
 	public Set<Airport> getSrcs( Airport dst ){
-		if(dst == null)
+		if(nullPointerCheck(dst))
 			return new HashSet<>();
 		Set<Airport> srcsAirports = new HashSet<>();
 
@@ -177,7 +177,7 @@ public class Directions implements IDirections  {
 	 *    and not reachable with fewer changes (0 = direct)
 	 */
 	public Set<Airport> getDsts( Airport src, int numChanges ){
-		if(src == null )
+		if( nullPointerCheck(src) )
 			return new HashSet<>();
 		//Set sofort mit den direkt erreichbaren Airports initialisieren
 		Set<Airport> airportSet = new HashSet<>(getDsts(src));
@@ -209,7 +209,7 @@ public class Directions implements IDirections  {
 	 * Basisfall ist direkte Verbindung von SrcAirport zu DstAirport
 	 */
 	public List<Direct> getRoute( Airport src, Airport dst) {
-		if(src == null || dst == null)
+		if( nullPointerCheck(src, dst) )
 			return new ArrayList<>();
 		List<Direct> routeList = new ArrayList<>();
 		Airport commonAirport;
@@ -338,5 +338,13 @@ public class Directions implements IDirections  {
 				directs.addAll(airportDirectMap.get(keyAirport));
 		}
 		return directs;
+	}
+
+	private static boolean nullPointerCheck(Object ... testObject){
+		for(int i = 0; i <= testObject.length -1; i++) {
+			if (testObject[i] == null)
+				return true;
+		}
+		return false;
 	}
 }
