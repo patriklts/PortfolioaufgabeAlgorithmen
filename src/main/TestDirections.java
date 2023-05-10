@@ -36,7 +36,6 @@ public class TestDirections {
 		System.out.println("Ausgabe Directs: ");
 		givenDataDirectSet.forEach(TestDirections::testToString);
 
-
 		// Testaufruf um die add Methode zu testen
 		/* Kontrollwerte:
 		 * Für d alles false, da bereits enthalten
@@ -101,7 +100,7 @@ public class TestDirections {
 		testGetDst(null, new Airport("ZRH"));
 		testGetDst(d, null);
 
-		//Test für getDsts(Airport src, int numChanges)
+		// Test für getDsts(Airport src, int numChanges)
 		/* Kontrollwerte:
 		 * <null, []>, <ABC, [XYZ, ABC]>, <FKB, [CSX, DME, FKB, ORD, ZRH]>
 		 */
@@ -116,7 +115,7 @@ public class TestDirections {
 		testGetDst(d, null, changes);
 		testGetDst(null, new Airport("JFK"), changes);
 
-		//Test für contains(Direct d)
+		// Test für contains(Direct d)
 		/* Kontrollwerte:
 		 * <null, false>, <ABC->XYZ, true>, <FKB->DME, false>
 		 */
@@ -127,7 +126,7 @@ public class TestDirections {
 		testContains(null, new Direct(new Airport("JFK"), new Airport("ZRH")));
 		testContains(d, null);
 
-		//Test für getBidirectedAirports()
+		// Test für getBidirectedAirports()
 		/* Kontrollwerte:
 		 * <[[DME, CSX], [FKB, CSX], [XYZ, ABC]]>
 		 */
@@ -172,7 +171,6 @@ public class TestDirections {
 		givenDataAirportSet.forEach(airport -> testGetAllDstsInfo(d, airport));
 		testGetAllDstsInfo(d, null);
 		testGetAllDstsInfo(null, new Airport("JFK"));
-
 
 		// Test für remove(Direct d)
 		/* Kontrollwerte:
