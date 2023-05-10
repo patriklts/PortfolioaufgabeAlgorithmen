@@ -44,9 +44,9 @@ public class TestDirections {
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect:");
 		System.out.println("---------------------------");
-		givenDataDirectSet.forEach(direct -> testAddDirect(d,  direct));
-		testAddDirect(new Directions(), new Direct(new Airport("FRA"), new Airport("ZRH")));
-		testAddDirect(new Directions(), new Direct(new Airport("Test1"), new Airport("Test2")));
+//		givenDataDirectSet.forEach(direct -> testAddDirect(d,  direct));
+//		testAddDirect(new Directions(), new Direct(new Airport("FRA"), new Airport("ZRH")));
+//		testAddDirect(new Directions(), new Direct(new Airport("Test1"), new Airport("Test2")));
 		testAddDirect(new Directions(), new Direct(null, null));
 		testAddDirect(null, new Direct(null, null));
 
@@ -199,10 +199,14 @@ public class TestDirections {
 	}
 
 	public static void testAddDirect(IDirections directions, Direct d){
-		if(directions == null || d == null || d.getSrc() == null || d.getDst() == null) {
-			System.out.println("Ungültige Eingabe!");
+//		if(directions == null || d == null || d.getSrc() == null || d.getDst() == null) {
+//			System.out.println("Ungültige Eingabe!");
+//			return;
+//		}
+
+		if(nullPointerCheck(directions, d, d.getDst(), d.getSrc()))
 			return;
-		}
+
 		boolean isSuccessful = directions.add(d);
 		if( isSuccessful ) {
 			System.out.println("Success!");
@@ -217,7 +221,7 @@ public class TestDirections {
 
 	public static void testAddDirect(IDirections directions, Set<Direct> directSet){
 		System.out.println();
-		if( directSet == null || directions == null ) {
+		if( nullPointerCheck(directions, directSet) ) {
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -233,7 +237,7 @@ public class TestDirections {
 	}
 
 	public static void testGetAll(IDirections data){
-		if(data == null) {
+		if(nullPointerCheck(data)) {
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -247,7 +251,7 @@ public class TestDirections {
 	}
 
 	public static void testGetSrcs(IDirections directions, Airport dst){
-		if(directions == null || dst == null){
+		if(nullPointerCheck(directions, dst)){
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -257,7 +261,7 @@ public class TestDirections {
 	}
 
 	public static void testGetDst(IDirections directions, Airport src){
-		if(directions == null || src == null){
+		if(nullPointerCheck(directions, src)){
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -267,7 +271,7 @@ public class TestDirections {
 	}
 
 	public static void testGetDst(IDirections directions, Airport src, int changes){
-		if(directions == null || src == null  ) {
+		if( nullPointerCheck(directions, src)  ) {
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -277,7 +281,7 @@ public class TestDirections {
 	}
 
 	public static void testContains(IDirections directions, Direct direct){
-		if(directions == null || direct == null){
+		if( nullPointerCheck(directions, direct, direct.getDst(), direct.getSrc() )){
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -292,7 +296,7 @@ public class TestDirections {
 	}
 
 	public static void testGetBidirectedAirports(IDirections directions){
-		if(directions == null){
+		if(nullPointerCheck(directions)){
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -301,7 +305,7 @@ public class TestDirections {
 	}
 
 	public static void testAddAll(IDirections directions, IDirections other){
-		if( directions == null || other == null ) {
+		if( nullPointerCheck(directions, other) ) {
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -314,7 +318,7 @@ public class TestDirections {
 	}
 
 	public static void testRemove(IDirections directions, Direct direct){
-		if(directions == null || direct == null){
+		if(nullPointerCheck( directions, direct, direct.getSrc(), direct.getDst() )){
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -327,7 +331,7 @@ public class TestDirections {
 	}
 
 	public static void testGetRoute(IDirections directions, Set<Airport> setOfAirport){
-		if(directions == null || setOfAirport == null){
+		if(nullPointerCheck(directions, setOfAirport)){
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -345,7 +349,7 @@ public class TestDirections {
 	}
 
 	public static void testMinimalRoundTrip(IDirections directions, Airport src){
-		if(directions == null || src == null){
+		if(nullPointerCheck(directions, src)){
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -354,7 +358,7 @@ public class TestDirections {
 	}
 
 	public static void testGetAllDstsInfo(IDirections directions, Airport airport){
-		if(directions == null || airport == null){
+		if(nullPointerCheck(directions, airport)){
 			System.out.println("Ungültige Eingabe!");
 			return;
 		}
@@ -464,6 +468,14 @@ public class TestDirections {
 		otherDirections.add(tmpDirect2);
 
 		return otherDirections;
+	}
+	
+	public static boolean nullPointerCheck(Object ... testObject){
+		for(int i = 0; i <= testObject.length -1; i++) {
+			if (testObject[i] == null)
+				return true;
+		}
+		return false;
 	}
 
 

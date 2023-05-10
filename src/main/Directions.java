@@ -1,3 +1,5 @@
+import jdk.incubator.vector.VectorOperators;
+
 import java.util.*;
 
 /*
@@ -15,7 +17,7 @@ public class Directions implements IDirections  {
      *   returns true if directions changes, false if not
      */
     public boolean add( Direct d ) {
-		if(d == null || d.getDst() == null || d.getSrc() == null)
+		if(TestDirections.nullPointerCheck(d, d.getSrc(), d.getDst()))
 			return false;
 
 		//Falls für Src-Airport noch kein Set hinterlegt, HashSet anlegen
@@ -33,7 +35,7 @@ public class Directions implements IDirections  {
 		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
-		if( d == null || d.isEmpty() || !(d.iterator().hasNext()) )
+		if(TestDirections.nullPointerCheck(d))
 			return hasAdded;
 
 		//Set durchlaufen und für jedes Element add() aufrufen, wenn Element hinzugefügt: hasAdded -> true
@@ -54,7 +56,7 @@ public class Directions implements IDirections  {
 		//Boolean zum Prüfen, ob min. ein Element hinzugefügt wurde
 		boolean hasAdded = false;
 
-		if( other == null )
+		if(TestDirections.nullPointerCheck(other, ))
 			return hasAdded;
 
 		//Alle Srcs und Dsts Airports von other in Set abspeichern
@@ -79,7 +81,7 @@ public class Directions implements IDirections  {
      *    returns true if directions changes, false if not
      */
     public boolean remove( Direct d ) {
-		if(d == null || d.getSrc() == null || d.getDst() == null)
+		if( TestDirections.nullPointerCheck( d, d.getDst(), d.getSrc() ) )
 			return false;
 		//Nur wenn Direct vorhanden aus Map entfernen
 		if( contains(d) ){
@@ -91,7 +93,7 @@ public class Directions implements IDirections  {
     }
     
     public boolean contains( Direct d ) {
-		if(d == null || d.getDst() == null || d.getSrc() == null)
+		if(TestDirections.nullPointerCheck( d, d.getSrc(), d.getDst() ) )
 			return false;
 
 		Set<Direct> directSet = airportDirectMap.get(d.getSrc());
@@ -140,13 +142,13 @@ public class Directions implements IDirections  {
      *    (empty set of there are no such)
      */
 	public Set<Airport> getDsts( Airport src ){
-		if(src == null)
+		if(TestDirections.nullPointerCheck(src))
 			return new HashSet<>();
 		Set<Airport> dstsAirports = new HashSet<>();
 
 		Set<Direct> directSet = airportDirectMap.get(src);
 		//Wenn Set null, leeres Set returnen
-		if( directSet == null)
+		if( directSet == null )
 			return dstsAirports;
 
 		//Für jeden Direct ausgehend von SrcAirport den DstAirport ermitteln und Return-Menge hinzufügen
