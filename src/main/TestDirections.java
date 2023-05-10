@@ -38,38 +38,47 @@ public class TestDirections {
 
 
 		// Testaufruf um die add Methode zu testen
-		/*
-		Beispie
+		/* Kontrollwerte:
+		 * Für d alles false, da bereits enthalten
+		 * <FRA->ZRH, true>, <Test1->Test2, true>, <null->null, false>
 		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect:");
 		System.out.println("---------------------------");
-//		givenDataDirectSet.forEach(direct -> testAddDirect(d,  direct));
-//		testAddDirect(new Directions(), new Direct(new Airport("FRA"), new Airport("ZRH")));
-//		testAddDirect(new Directions(), new Direct(new Airport("Test1"), new Airport("Test2")));
+		givenDataDirectSet.forEach(direct -> testAddDirect(d,  direct));
+		testAddDirect(new Directions(), new Direct(new Airport("FRA"), new Airport("ZRH")));
+		testAddDirect(new Directions(), new Direct(new Airport("Test1"), new Airport("Test2")));
 		testAddDirect(new Directions(), new Direct(null, null));
 		testAddDirect(null, new Direct(null, null));
 
 		// Testaufruf um die Add(Set) Methode zu testen
+		/* Kontrollwerte:
+		 * Für d alles false, da bereits enthalten.
+		 * Für neues Directions sollten alle Werte hinzugefügt werden.
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect(Set):");
 		System.out.println("---------------------------");
 		testAddDirect(d, givenDataDirectSet);
-		testAddDirect(null, givenDataDirectSet);
+		testAddDirect(new Directions(), givenDataDirectSet);
 		testAddDirect(d, new HashSet<>());
 
 		// Testaufruf der getAll-Methoden
+		/* Kontrollwerte:
+		 * getAllSrcs Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, FKB]
+		 * getAllDsts Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, ORD, FKB]
+		 * getAllAirport Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, ORD, FKB]
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von allen getAll* Methoden mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
 		testGetAll(d);
 		testGetAll(null);
 
-		//getAllSrcs Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, FKB]
-		//getAllDsts Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, ORD, FKB]
-		//getAllAirport Soll: [DME, CSX, XYZ, ABC, ZRH, TPE, AGP, ORD, FKB]
-
 		// Testaufruf der getSrcs Methode
+		/* Kontrollwerte:
+		 * <null, []>, <ABC, XYZ>, <FKB, [DME, CSX, ZRH]>
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von getSrcs Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
@@ -80,6 +89,9 @@ public class TestDirections {
 		testGetSrcs(null, new Airport("JFK"));
 
 		// Testaufruf der GetDst Methode
+		/* Kontrollwerte:
+		 * <null, []>, <ABC, [XYZ]>, <FKB, [CSX]>, <DME, [CSX, FKB, ORD, ZRH]>
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von getDst Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
@@ -90,7 +102,10 @@ public class TestDirections {
 		testGetDst(d, null);
 
 		//Test für getDsts(Airport src, int numChanges)
-		int changes = (int) (Math.random() *10) -1 ;
+		/* Kontrollwerte:
+		 * <null, []>, <ABC, [XYZ, ABC]>, <FKB, [CSX, DME, FKB, ORD, ZRH]>
+		 */
+		int changes = 2;
 		System.out.println("\n---------------------------");
 		System.out.println("Test von getDst-Methode mit angabe Changes mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
@@ -102,6 +117,9 @@ public class TestDirections {
 		testGetDst(null, new Airport("JFK"), changes);
 
 		//Test für contains(Direct d)
+		/* Kontrollwerte:
+		 * <null, false>, <ABC->XYZ, true>, <FKB->DME, false>
+		 */
 		System.out.println("\n---------------------------");
 		System.out.println("Test von contains Methode mit gegebenen Datensätzen:");
 		System.out.println("---------------------------");
