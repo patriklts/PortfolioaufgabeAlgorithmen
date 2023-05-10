@@ -130,19 +130,6 @@ public class TestDirections {
 		testMinimalRoundTrip(d, null);
 		testMinimalRoundTrip(null, new Airport("JFK"));
 
-		// Test für addAll(IDirections other)
-		/* Kontrollwerte:
-		 * 1.<[BGH, MUN, HN, KA], true>, 2.<[BGH, MUN, HN, KA]>, <null, false>
-		 */
-		System.out.println("\n---------------------------");
-		System.out.println("Test von addAll (Interface IDirections DatenTyp) Methode:");
-		System.out.println("---------------------------");
-		IDirections other = setUpAnotherIDirections();
-		testAddAll(d, other);
-		testAddAll(d, other);
-		testAddAll(d, null);
-		testAddAll(null, other);
-
 		// Test für getRoute(Airport src, Airport dst)
 		/* Kontrollwerte:
 		 * <ORD, DME, []>, <DME, ORD, [DME->ORD]>,
@@ -180,6 +167,19 @@ public class TestDirections {
 		testRemove(d, new Direct(new Airport("FKB"), new Airport("CSX") ) );
 		testRemove(d, null);
 		testRemove(null, new Direct(new Airport("ZRH"), new Airport("JFK")));
+
+		// Test für addAll(IDirections other)
+		/* Kontrollwerte:
+		 * 1.<[BGH, MUN, HN, KA], true>, 2.<[BGH, MUN, HN, KA]>, <null, false>
+		 */
+		System.out.println("\n---------------------------");
+		System.out.println("Test von addAll (Interface IDirections DatenTyp) Methode:");
+		System.out.println("---------------------------");
+		IDirections other = setUpAnotherIDirections();
+		testAddAll(d, other);
+		testAddAll(d, other);
+		testAddAll(d, null);
+		testAddAll(null, other);
 	}
 
 
