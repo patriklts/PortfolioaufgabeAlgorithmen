@@ -44,9 +44,9 @@ public class TestDirections {
 		System.out.println("\n---------------------------");
 		System.out.println("Test von addDirect:");
 		System.out.println("---------------------------");
-//		givenDataDirectSet.forEach(direct -> testAddDirect(d,  direct));
-//		testAddDirect(new Directions(), new Direct(new Airport("FRA"), new Airport("ZRH")));
-//		testAddDirect(new Directions(), new Direct(new Airport("Test1"), new Airport("Test2")));
+		givenDataDirectSet.forEach(direct -> testAddDirect(d,  direct));
+		testAddDirect(new Directions(), new Direct(new Airport("FRA"), new Airport("ZRH")));
+		testAddDirect(new Directions(), new Direct(new Airport("Test1"), new Airport("Test2")));
 		testAddDirect(new Directions(), new Direct(null, null));
 		testAddDirect(null, new Direct(null, null));
 
