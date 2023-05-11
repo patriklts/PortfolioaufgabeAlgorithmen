@@ -15,7 +15,9 @@ public class Directions implements IDirections  {
      *   returns true if directions changes, false if not
      */
     public boolean add( Direct d ) {
-		if(nullPointerCheck(d, d.getSrc(), d.getDst()))
+		if(nullPointerCheck(d))
+			return false;
+		if(nullPointerCheck(d.getSrc(), d.getDst()))
 			return false;
 
 		//Falls für Src-Airport noch kein Set hinterlegt, HashSet anlegen
@@ -79,7 +81,7 @@ public class Directions implements IDirections  {
      *    returns true if directions changes, false if not
      */
     public boolean remove( Direct d ) {
-		if(d == null)
+		if( nullPointerCheck(d))
 			return false;
 		if( nullPointerCheck( d.getDst(), d.getSrc() ) )
 			return false;
@@ -93,7 +95,7 @@ public class Directions implements IDirections  {
     }
     
     public boolean contains( Direct d ) {
-		if(d == null)
+		if( nullPointerCheck(d) )
 			return false;
 		if(nullPointerCheck( d.getSrc(), d.getDst() ) )
 			return false;
@@ -146,8 +148,8 @@ public class Directions implements IDirections  {
 	public Set<Airport> getDsts( Airport src ){
 		if(nullPointerCheck(src))
 			return new HashSet<>();
-		Set<Airport> dstsAirports = new HashSet<>();
 
+		Set<Airport> dstsAirports = new HashSet<>();
 		Set<Direct> directSet = airportDirectMap.get(src);
 		//Wenn Set null, leeres Set returnen
 		if( directSet == null )
@@ -166,6 +168,7 @@ public class Directions implements IDirections  {
 	public Set<Airport> getSrcs( Airport dst ){
 		if(nullPointerCheck(dst))
 			return new HashSet<>();
+
 		Set<Airport> srcsAirports = new HashSet<>();
 
 		//Jedes Direct durchlaufen und wenn DstAirport übereinstimmt → SrcAirport dem RückgabeSet hinzufügen
@@ -183,6 +186,7 @@ public class Directions implements IDirections  {
 	public Set<Airport> getDsts( Airport src, int numChanges ){
 		if( nullPointerCheck(src) )
 			return new HashSet<>();
+
 		//Set sofort mit den direkt erreichbaren Airports initialisieren
 		Set<Airport> airportSet = new HashSet<>(getDsts(src));
 
@@ -215,6 +219,7 @@ public class Directions implements IDirections  {
 	public List<Direct> getRoute( Airport src, Airport dst) {
 		if( nullPointerCheck(src, dst) )
 			return null;
+
 		List<Direct> routeList = new ArrayList<>();
 		Airport commonAirport;
 
@@ -281,8 +286,8 @@ public class Directions implements IDirections  {
 		if(src == null )
 			return new ArrayList<>();
 		//Idee: Roundtrip ist identisch wie Berechnung von optimaler Route von src nach src
-		List<Airport> airportList = new ArrayList<>();
 
+		List<Airport> airportList = new ArrayList<>();
 		List<Direct> directList = getRoute(src, src);
 		//Wenn keine Route gefunden wurde, gibt es kein möglichen Roundtrip
 		if(directList == null)
@@ -300,7 +305,7 @@ public class Directions implements IDirections  {
 	}
 
 	public Map<Integer, Set<Airport>> getAllDstsInfo(Airport src){
-		if(src == null)
+		if( nullPointerCheck(src) )
 			return new HashMap<>();
 		//Map für Rückgabe und Set in dem alle bereits in Map enthaltenen Airports gespeichert werden
 		Map<Integer, Set<Airport>> myMap = new HashMap<>();
