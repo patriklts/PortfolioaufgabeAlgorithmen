@@ -111,7 +111,7 @@ public class TestDirections {
 		System.out.println("---------------------------");
 		System.out.println("Ausgabe:");
 		System.out.println("Anzahl Changes: " + changes);
-		givenDataAirportSet.forEach(airport -> testGetDst( d, airport, changes ) );
+		givenDataAirportSet.forEach(airport -> testGetDst(d, airport, changes));
 		testGetDst(null, null, changes);
 		testGetDst(d, null, changes);
 		testGetDst(null, new Airport("JFK"), changes);
@@ -123,7 +123,7 @@ public class TestDirections {
 		System.out.println("\n---------------------------");
 		System.out.println("Test von contains Methode:");
 		System.out.println("---------------------------");
-		givenDataDirectSet.forEach(direct -> testContains(d, direct ));
+		givenDataDirectSet.forEach(direct -> testContains(d, direct));
 		testContains(d, new Direct( new Airport("JFK"), new Airport("ZRH") ) );
 		testContains(null, new Direct( new Airport("JFK"), new Airport("ZRH") ) );
 		testContains(d, null);
@@ -145,7 +145,7 @@ public class TestDirections {
 		System.out.println("\n---------------------------");
 		System.out.println("Test von der minimalRoundTrip Methode:");
 		System.out.println("---------------------------");
-		givenDataAirportSet.forEach( airport -> testMinimalRoundTrip(d, airport) );
+		givenDataAirportSet.forEach(airport -> testMinimalRoundTrip(d, airport));
 		testMinimalRoundTrip(d, null);
 		testMinimalRoundTrip(null, new Airport("JFK"));
 
@@ -209,28 +209,28 @@ public class TestDirections {
 
 
 	public static void testToString(Airport a1){
-		System.out.println( a1 );
+		System.out.println(a1);
 	}
 
 	public static void testToString(Direct direct){
-		System.out.println( direct );
+		System.out.println(direct);
 	}
 
 	public static void testAddDirect(IDirections directions, Direct d){
 
-		if(nullPointerCheck(directions)) {
+		if( nullPointerCheck(directions) ){
 			System.out.println("Objekt null!");
 			return;
 		}
 
 		boolean isSuccessful = directions.add(d);
-		if( isSuccessful ) {
+		if(isSuccessful) {
 			System.out.println("Success!");
 			System.out.println("Ausgabe:");
 			System.out.println("Hinzugefügtes Element: " + d);
-			System.out.println(directions.getAllAirports());
+			System.out.println( directions.getAllAirports() );
 		}
-		if( !isSuccessful )
+		if(!isSuccessful)
 			System.out.println("Bitte Prüfen, der Direct " + d + " wurde nicht hinzugefügt");
 		System.out.println("\n");
 	}
@@ -241,13 +241,13 @@ public class TestDirections {
 			return;
 		}
 		System.out.println();
-		boolean isSuccessful = directions.add( directSet );
-		if( isSuccessful) {
+		boolean isSuccessful = directions.add(directSet);
+		if(isSuccessful) {
 			System.out.println("Success!");
 			System.out.println("Ausgabe:");
 			System.out.println( directions.getAllAirports() );
 		}
-		if( !isSuccessful ){
+		if(!isSuccessful){
 			System.out.println("Bitte Prüfen, das Set " + directSet + " wurde nicht hinzugefügt");
 		}
 	}
@@ -267,7 +267,7 @@ public class TestDirections {
 	}
 
 	public static void testGetSrcs(IDirections directions, Airport dst){
-		if(nullPointerCheck(directions)){
+		if( nullPointerCheck(directions) ){
 			System.out.println("Objekt null!");
 			return;
 		}
@@ -277,7 +277,7 @@ public class TestDirections {
 	}
 
 	public static void testGetDst(IDirections directions, Airport src){
-		if(nullPointerCheck(directions)){
+		if( nullPointerCheck(directions) ){
 			System.out.println("Objekt null!");
 			return;
 		}
@@ -288,7 +288,7 @@ public class TestDirections {
 
 	public static void testGetDst(IDirections directions, Airport src, int changes){
 		//Test, ob eine der Objektparameter auf null verweist
-		if( nullPointerCheck(directions)  ) {
+		if( nullPointerCheck(directions)  ){
 			System.out.println("Objekt null!");
 			return;
 		}
@@ -300,7 +300,7 @@ public class TestDirections {
 
 	public static void testContains(IDirections directions, Direct direct){
 		//Test, ob eine der Objektparameter auf null verweist
-		if( nullPointerCheck(directions)){
+		if( nullPointerCheck(directions) ){
 			System.out.println("Objekt null!");
 			return;
 		}
@@ -317,7 +317,7 @@ public class TestDirections {
 
 	public static void testGetBidirectedAirports(IDirections directions){
 		//Test, ob eine der Objektparameter auf null verweist
-		if(nullPointerCheck(directions)){
+		if( nullPointerCheck(directions) ){
 			System.out.println("Objekt null!");
 			return;
 		}
@@ -328,7 +328,7 @@ public class TestDirections {
 
 	public static void testAddAll(IDirections directions, IDirections other){
 		//Test, ob eine der Objektparameter auf null verweist
-		if( nullPointerCheck(directions, other) ) {
+		if( nullPointerCheck(directions, other) ){
 			System.out.println("Objekt null!");
 			return;
 		}
@@ -343,7 +343,7 @@ public class TestDirections {
 
 	public static void testRemove(IDirections directions, Direct direct){
 		//Test, ob eine der Objektparameter auf null verweist
-		if(nullPointerCheck(directions)){
+		if( nullPointerCheck(directions) ){
 			System.out.println("Objekt null!");
 			return;
 		}
@@ -367,9 +367,9 @@ public class TestDirections {
 		Airport[] ownAirportArray= new Airport[ setOfAirport.size() -1 ];
 		ownAirportArray = setOfAirport.toArray(ownAirportArray);
 		for(int i = 0; i <= (ownAirportArray.length -1); i++ ) {
-			for (int j = i + 1; j <= (ownAirportArray.length - 1); j++){
+			for(int j = i + 1; j <= (ownAirportArray.length - 1); j++){
 				System.out.println("Airport Source: " + ownAirportArray[i]);
-				System.out.println("Airport Destination: " +ownAirportArray[j]);
+				System.out.println("Airport Destination: " + ownAirportArray[j]);
 				System.out.println(directions.getRoute(ownAirportArray[i], ownAirportArray[j]));
 				System.out.println();
 			}
@@ -382,7 +382,7 @@ public class TestDirections {
 
 	public static void testMinimalRoundTrip(IDirections directions, Airport src){
 		//Test, ob eine der Objektparameter auf null verweist
-		if(nullPointerCheck(directions)){
+		if( nullPointerCheck(directions) ){
 			System.out.println("Objekt null!");
 			return;
 		}
@@ -393,7 +393,7 @@ public class TestDirections {
 
 	public static void testGetAllDstsInfo(IDirections directions, Airport airport){
 		//Test, ob eine der Objektparameter auf null verweist
-		if(nullPointerCheck(directions)){
+		if( nullPointerCheck(directions) ){
 			System.out.println("Objekt null!");
 			return;
 		}
