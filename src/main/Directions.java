@@ -102,7 +102,7 @@ public class Directions implements IDirections  {
 
 		Set<Direct> directSet = airportDirectMap.get(d.getSrc());
 		//Wenn für den SrcAirport kein Set hinterlegt → Null abfangen und return false
-		if(directSet == null)
+		if( nullPointerCheck(directSet) )
 			return false;
 		return directSet.contains(d);
     }
@@ -152,7 +152,7 @@ public class Directions implements IDirections  {
 		Set<Airport> dstsAirports = new HashSet<>();
 		Set<Direct> directSet = airportDirectMap.get(src);
 		//Wenn Set null, leeres Set returnen
-		if( directSet == null )
+		if( nullPointerCheck(directSet) )
 			return dstsAirports;
 
 		//Für jeden Direct ausgehend von SrcAirport den DstAirport ermitteln und Return-Menge hinzufügen
@@ -228,7 +228,7 @@ public class Directions implements IDirections  {
 			return null;
 		}
 		//Wenn für Airport keine erreichbaren Airports hinterlegt sind
-		if(airportDirectMap.get(src) == null)
+		if( nullPointerCheck( airportDirectMap.get(src) ) )
 			return null;
 
 		//Falls Direktverbindung vorhanden, Basisfall für Rekursion
@@ -283,14 +283,14 @@ public class Directions implements IDirections  {
 	 *    (if no such exists, return null)
 	 */
 	public List<Airport> minimalRoundTrip( Airport src ){
-		if(src == null )
+		if( nullPointerCheck(src) )
 			return new ArrayList<>();
 		//Idee: Roundtrip ist identisch wie Berechnung von optimaler Route von src nach src
 
 		List<Airport> airportList = new ArrayList<>();
 		List<Direct> directList = getRoute(src, src);
 		//Wenn keine Route gefunden wurde, gibt es kein möglichen Roundtrip
-		if(directList == null)
+		if( nullPointerCheck(directList) )
 			return null;
 
 		for(Direct direct : directList){
