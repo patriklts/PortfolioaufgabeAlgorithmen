@@ -1,5 +1,4 @@
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -414,7 +413,7 @@ public class TestDirections {
 
 	public static Set<Airport> createOwnTestAirport(){
 
-		Set<Airport> airportSet = new LinkedHashSet<>();
+		Set<Airport> airportSet = new HashSet<>();
 
 		airportSet.add( new Airport("FRA","Frankfurt") ); // 0
 		airportSet.add( new Airport("ZRH", "Zürich") ); // 1
@@ -429,7 +428,7 @@ public class TestDirections {
 
 	public static Set<Direct> createOwnTestDirect(){
 
-		Set<Direct> directSet = new LinkedHashSet<>();
+		Set<Direct> directSet = new HashSet<>();
 
 		Airport[] airportArr = new Airport[ createOwnTestAirport().size() - 1 ];
 
@@ -447,7 +446,7 @@ public class TestDirections {
 
 	public static Set<Airport> createGivenDataAirportSet(){
 
-		Set<Airport> airportSet = new LinkedHashSet<>();
+		Set<Airport> airportSet = new HashSet<>();
 
 		airportSet.add( new Airport("DME") );
 		airportSet.add( new Airport("CSX") );
@@ -465,7 +464,7 @@ public class TestDirections {
 
 	public static Set<Direct> createGivenDataDirectSet(){
 
-		Set<Direct> directSet = new LinkedHashSet<>();
+		Set<Direct> directSet = new HashSet<>();
 
 		directSet.add( new Direct( new Airport("DME"), new Airport("CSX") )  );
 		directSet.add( new Direct( new Airport("DME"), new Airport("FKB") )  );
